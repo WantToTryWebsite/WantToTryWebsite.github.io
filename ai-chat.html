@@ -26,6 +26,46 @@
         <a href="policies.html" class="nav-link"><i class="fa-solid fa-book-open"></i> นโยบาย</a>
     </div>
 
+    <!-- Disclaimer Modal -->
+    <div class="disclaimer-overlay" id="disclaimerOverlay">
+        <div class="disclaimer-modal">
+            <div class="disclaimer-header">
+                <img src="images/Logo.png" alt="Want To Try" class="disclaimer-logo">
+                <span class="disclaimer-brand">WANT TO TRY</span>
+            </div>
+            <h2 class="disclaimer-title">ข้อจำกัดความรับผิดและข้อตกลงการใช้งาน</h2>
+            <div class="disclaimer-content">
+                <p class="disclaimer-intro">กรุณาอ่านและทำความเข้าใจข้อกำหนดต่อไปนี้ก่อนใช้งานระบบ AI Chatbot
+                    ของพรรคเด็กอยากลอง:</p>
+
+                <div class="disclaimer-item">
+                    <strong>1. การแจ้งเตือนเกี่ยวกับระบบ AI:</strong> ท่านกำลังสนทนากับระบบปัญญาประดิษฐ์ (AI)
+                    ซึ่งไม่ใช่บุคคลหรือตัวแทนอย่างเป็นทางการของพรรคเด็กอยากลอง
+                </div>
+
+                <div class="disclaimer-item">
+                    <strong>2. ข้อจำกัดความรับผิด:</strong> พรรคเด็กอยากลองไม่รับผิดชอบต่อความเสียหาย สูญเสีย
+                    หรือผลกระทบใดๆ ที่อาจเกิดขึ้นจากการใช้ข้อมูลที่ได้รับจากระบบนี้ ข้อมูลที่ให้อาจไม่ครบถ้วน ไม่ถูกต้อง
+                    หรือไม่ตรงกับนโยบายปัจจุบันของพรรค
+                </div>
+
+                <div class="disclaimer-item">
+                    <strong>3. แหล่งข้อมูลอย่างเป็นทางการ:</strong> ผู้ใช้งานควรตรวจสอบข้อมูลจาก<a href="policies.html"
+                        class="disclaimer-link">เว็บไซต์อย่างเป็นทางการ</a>ของพรรคเพื่อความถูกต้องของข้อมูล
+                </div>
+
+                <div class="disclaimer-item">
+                    <strong>4. ข้อมูลส่วนบุคคล:</strong> ระบบนี้ไม่มีการจัดเก็บ รวบรวม
+                    หรือประมวลผลข้อมูลส่วนบุคคลของผู้ใช้งาน ตามพระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (PDPA)
+                    ผู้ใช้งานไม่ควรให้ข้อมูลส่วนบุคคลที่ละเอียดอ่อนผ่านระบบนี้
+                </div>
+            </div>
+            <button class="disclaimer-accept-btn" onclick="acceptDisclaimer()">
+                ยอมรับข้อตกลง
+            </button>
+        </div>
+    </div>
+
     <main class="pp-chat-window" id="chatWindow">
         <!-- New Internal Header -->
         <div class="pp-chat-inner-header">
@@ -636,8 +676,26 @@
             scrollToBottom();
         }
 
+        // --- Disclaimer Modal ---
+        function checkDisclaimer() {
+            const accepted = localStorage.getItem('ai_disclaimer_accepted');
+            const overlay = document.getElementById('disclaimerOverlay');
+            if (!accepted) {
+                overlay.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function acceptDisclaimer() {
+            localStorage.setItem('ai_disclaimer_accepted', 'true');
+            const overlay = document.getElementById('disclaimerOverlay');
+            overlay.classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+
         // --- Initialization ---
         window.addEventListener('DOMContentLoaded', () => {
+            checkDisclaimer();
             applyAdminMode();
             updateCounterUI();
         });

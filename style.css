@@ -831,6 +831,20 @@ img {
     margin-bottom: 48px;
 }
 
+/* Hero Image (ใช้แทน subtitle) */
+.hero-image-wrapper {
+    margin-bottom: 48px;
+    display: flex;
+    justify-content: center;
+}
+
+.hero-subtitle-image {
+    max-width: 600px;
+    width: 100%;
+    height: auto;
+    border-radius: var(--border-radius-md);
+}
+
 .hero-actions {
     display: flex;
     justify-content: center;
@@ -1086,104 +1100,153 @@ img {
     color: var(--color-school-yellow);
 }
 
-/* Candidates Grid */
+/* Candidates Grid - People's Party Style */
 .candidates-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 32px;
 }
 
 .candidate-card {
-    background: white;
-    border-radius: var(--border-radius-md);
-    overflow: hidden;
-    box-shadow: var(--shadow-sm);
-    transition: var(--transition-normal);
+    background: transparent;
+    border-radius: 0;
+    overflow: visible;
+    box-shadow: none;
+    transition: all 0.5s ease-out;
     cursor: pointer;
-    border: 1px solid var(--color-border);
+    border: none;
     position: relative;
     display: flex;
     flex-direction: column;
+    text-decoration: none;
 }
 
 .candidate-card:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-lg);
+    transform: scale(1.02);
 }
 
 .candidate-img-wrapper {
-    height: 240px;
-    background: var(--color-bg-light);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    max-width: 375px;
+    width: 100%;
     position: relative;
     overflow: hidden;
+    border-radius: 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 1);
+    transition: all 0.5s ease-out;
+    background: #0d0d0d;
+}
+
+.candidate-card:hover .candidate-img-wrapper {
+    transform: scale(1.05);
+    box-shadow: 0 0 60px rgba(0, 0, 0, 1);
 }
 
 .candidate-img-wrapper img {
     width: 100%;
-    height: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: 2/3;
     object-fit: cover;
-    transition: var(--transition-normal);
 }
 
-.candidate-card:hover .candidate-img-wrapper img {
-    transform: scale(1.05);
+/* Shimmer Effect */
+.candidate-img-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    background: linear-gradient(105deg, transparent 20%, rgba(255, 255, 255, 0.1) 45%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0.1) 55%, transparent 80%);
+    transform: translateX(-100%);
+    pointer-events: none;
+    z-index: 2;
+}
+
+.candidate-card:hover .candidate-img-wrapper::before {
+    animation: shimmer 0.8s ease-in-out forwards;
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+
+    1% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
 }
 
 .candidate-placeholder {
-    width: 120px;
-    height: 120px;
-    background: rgba(0, 0, 0, 0.05);
-    border-radius: 50%;
+    width: 100%;
+    aspect-ratio: 2/3;
+    background: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 3rem;
-    color: var(--color-text-muted);
+    font-size: 4rem;
+    color: rgba(255, 255, 255, 0.2);
 }
 
 .candidate-info {
-    padding: 24px;
+    padding: 0;
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
+    gap: 4px;
 }
 
 .candidate-role {
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    font-size: 0.9rem;
+    text-transform: none;
+    letter-spacing: 0;
     color: var(--color-primary-red);
     font-weight: 700;
-    margin-bottom: 8px;
+    margin-bottom: 0;
+    opacity: 0.9;
+    transition: color 0.3s;
+}
+
+.candidate-card:hover .candidate-role {
+    color: #ff6b6b;
 }
 
 .candidate-info h3 {
-    font-size: 1.25rem;
-    margin-bottom: 12px;
+    font-size: 1.5rem;
+    margin-bottom: 0;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    transition: color 0.3s;
+}
+
+.candidate-card:hover .candidate-info h3 {
+    color: white;
+}
+
+.candidate-info h3::after {
+    content: '›';
+    font-size: 1.5rem;
+    margin-left: 4px;
+    display: inline-block;
+    transition: transform 0.3s;
+}
+
+.candidate-card:hover .candidate-info h3::after {
+    transform: translateX(4px);
 }
 
 .candidate-motto {
-    color: var(--color-text-muted);
-    font-size: 0.95rem;
-    font-style: italic;
-    margin-bottom: 20px;
+    display: none;
 }
 
 .btn-text {
-    margin-top: auto;
-    background: none;
-    border: none;
-    color: var(--color-primary-blue);
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 0;
-    font-size: 0.9rem;
+    display: none;
 }
 
 .btn-text:hover {
@@ -2095,6 +2158,51 @@ footer {
     color: var(--color-text-muted);
 }
 
+/* Footer Video Player */
+.footer-video-wrapper {
+    width: 100%;
+    max-width: 320px;
+    margin-top: 16px;
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    background: #000;
+}
+
+.footer-video {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    display: block;
+    border: none;
+    border-radius: var(--border-radius-md);
+}
+
+.footer-video-wrapper video {
+    object-fit: cover;
+}
+
+/* Footer Image */
+.footer-image-wrapper {
+    width: 100%;
+    max-width: 320px;
+    margin-top: 16px;
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+}
+
+.footer-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: var(--border-radius-md);
+    transition: var(--transition-normal);
+}
+
+.footer-image:hover {
+    transform: scale(1.02);
+}
+
 .footer-links h4 {
     margin-bottom: 20px;
 }
@@ -2118,8 +2226,8 @@ footer {
 
 /* President Hero Section */
 .president-section {
-    padding: calc(var(--header-height) + 40px) 0 80px;
-    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    padding: calc(var(--header-height) + 60px) 0 100px;
+    background: radial-gradient(ellipse at center top, #3d1015 0%, #1a1a1a 50%, #0d0d0d 100%);
     color: white;
     position: relative;
     overflow: hidden;
@@ -2129,11 +2237,13 @@ footer {
 .president-section::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    background: linear-gradient(90deg, var(--color-primary-red), var(--color-primary-blue));
+    top: -50%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(230, 57, 70, 0.25) 0%, transparent 70%);
+    pointer-events: none;
 }
 
 .president-container {
@@ -2143,44 +2253,63 @@ footer {
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
+    z-index: 1;
 }
 
 .president-label {
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: var(--color-primary-red);
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 2px;
-    margin-bottom: 24px;
+    margin-bottom: 30px;
     display: inline-block;
-    padding: 8px 24px;
-    border: 1px solid var(--color-primary-red);
+    padding: 10px 28px;
+    border: 1.5px solid var(--color-primary-red);
     border-radius: 50px;
     background: rgba(230, 57, 70, 0.1);
 }
 
 .president-image-wrapper {
-    width: 300px;
-    height: 400px;
-    margin-bottom: 30px;
+    width: 375px;
+    max-width: 100%;
+    aspect-ratio: 2/3;
+    margin-bottom: 40px;
     position: relative;
-    border-radius: var(--border-radius-lg);
-    background: var(--color-school-black);
+    border-radius: 32px;
+    background: #0d0d0d;
     overflow: hidden;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: var(--transition-normal);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 1);
+    transition: all 0.5s ease-out;
+    border: none;
+}
+
+.president-image-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    background: linear-gradient(105deg, transparent 20%, rgba(255, 255, 255, 0.1) 45%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0.1) 55%, transparent 80%);
+    transform: translateX(-100%);
+    pointer-events: none;
+    z-index: 2;
 }
 
 .president-image-wrapper:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+    transform: scale(1.05);
+    box-shadow: 0 0 90px rgba(0, 0, 0, 1);
+}
+
+.president-image-wrapper:hover::before {
+    animation: shimmer 0.8s ease-in-out forwards;
 }
 
 .president-image-wrapper img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: all 0.5s ease-out;
 }
 
 .president-placeholder {
@@ -2195,60 +2324,69 @@ footer {
 }
 
 .president-info h1 {
-    font-size: 3.5rem;
+    font-size: 3rem;
     margin-bottom: 16px;
-    background: linear-gradient(90deg, #fff, #ccc);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: white;
+    font-weight: 700;
+    background: none;
+    -webkit-text-fill-color: unset;
 }
 
 .president-quote {
-    font-size: 1.5rem;
-    color: rgba(255, 255, 255, 0.7);
-    font-style: italic;
-    max-width: 800px;
+    font-size: 1.3rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-style: normal;
+    max-width: 600px;
     margin: 0 auto 30px;
     line-height: 1.4;
 }
 
 .president-actions {
-    margin-top: 20px;
+    margin-top: 24px;
 }
 
 .btn-president {
-    padding: 14px 32px;
-    font-size: 1.1rem;
+    padding: 16px 36px;
+    font-size: 1rem;
     background: transparent;
-    border: 2px solid white;
+    border: 2px solid rgba(255, 255, 255, 0.5);
     color: white;
     border-radius: 50px;
     cursor: pointer;
     transition: var(--transition-normal);
+    font-family: inherit;
+    font-weight: 500;
 }
 
 .btn-president:hover {
     background: white;
     color: #1a1a1a;
+    border-color: white;
 }
 
 /* Members Section Header */
+.members-section {
+    background: linear-gradient(180deg, #0d0d0d 0%, #1a1a1a 100%);
+    padding: 60px 0 80px;
+}
+
 .members-header {
     text-align: center;
-    margin: 60px 0 40px;
+    margin: 0 0 50px;
     position: relative;
 }
 
 .members-header h2 {
-    font-size: 2.5rem;
-    color: var(--color-school-black);
+    font-size: 2.2rem;
+    color: white;
     margin-bottom: 16px;
+    font-weight: 600;
 }
 
 .members-header-line {
     width: 80px;
     height: 4px;
-    background: var(--color-primary-blue);
+    background: var(--color-primary-red);
     margin: 0 auto;
     border-radius: 2px;
 }
@@ -2304,7 +2442,6 @@ body.dark-theme .president-quote {
 
 /* Candidates Card Dark */
 body.dark-theme .candidate-card {
-    background-color: #222;
     border-color: #333;
 }
 
@@ -3897,5 +4034,167 @@ body.dark-theme .footer-links ul li a:hover {
     .pillar-card:hover i,
     .pillar-card:hover h3 {
         transform: none;
+    }
+}
+
+/* ===== Disclaimer Modal ===== */
+.disclaimer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(248, 249, 250, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.disclaimer-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.disclaimer-modal {
+    background: white;
+    border-radius: 20px;
+    max-width: 480px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 0;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    transform: translateY(20px) scale(0.95);
+    transition: transform 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.disclaimer-overlay.show .disclaimer-modal {
+    transform: translateY(0) scale(1);
+}
+
+.disclaimer-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 24px 32px 16px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.disclaimer-logo {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+}
+
+.disclaimer-brand {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-primary-red);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.disclaimer-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--color-primary-blue);
+    text-align: center;
+    margin: 0;
+    padding: 20px 32px 0;
+}
+
+.disclaimer-content {
+    color: var(--color-text-main);
+    font-size: 0.85rem;
+    line-height: 1.8;
+    padding: 16px 32px 24px;
+}
+
+.disclaimer-intro {
+    margin-bottom: 20px;
+    color: var(--color-text-muted);
+    font-size: 0.82rem;
+}
+
+.disclaimer-item {
+    margin-bottom: 14px;
+    padding-left: 0;
+    text-align: left;
+}
+
+.disclaimer-item strong {
+    color: var(--color-primary-red);
+    font-weight: 600;
+}
+
+.disclaimer-link {
+    color: var(--color-primary-blue);
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+.disclaimer-link:hover {
+    color: var(--color-primary-red);
+}
+
+.disclaimer-accept-btn {
+    display: block;
+    width: calc(100% - 48px);
+    margin: 0 24px 24px;
+    padding: 14px 24px;
+    background: linear-gradient(135deg, var(--color-primary-red), #D62828);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: var(--transition-normal);
+    box-shadow: 0 4px 15px rgba(230, 57, 70, 0.3);
+}
+
+.disclaimer-accept-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(230, 57, 70, 0.4);
+}
+
+.disclaimer-accept-btn:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 480px) {
+    .disclaimer-modal {
+        max-width: 95%;
+        border-radius: 16px;
+    }
+
+    .disclaimer-header {
+        padding: 20px 20px 14px;
+    }
+
+    .disclaimer-title {
+        font-size: 1.05rem;
+        padding: 16px 20px 0;
+    }
+
+    .disclaimer-content {
+        font-size: 0.8rem;
+        padding: 14px 20px 20px;
+    }
+
+    .disclaimer-accept-btn {
+        width: calc(100% - 40px);
+        margin: 0 20px 20px;
+        padding: 12px 20px;
     }
 }

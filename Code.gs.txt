@@ -1,0 +1,70 @@
+/**
+ * Google Apps Script Backend (Code.gs)
+ * 1. Create a Google Sheet.
+ * 2. Get the Sheet ID.
+ * 3. Paste this code into Apps Script.
+ * 4. Update SHEET_ID and TARGET_EMAIL.
+ * 5. Deploy as Web App (Execute as: Me, Access: Anyone).
+ */
+
+const SHEET_ID = 'YOUR_SHEET_ID_HERE';
+const TARGET_EMAIL = 'your-council-email@school.ac.th';
+
+function doPost(e) {
+  try {
+    const data = JSON.parse(e.postData.contents);
+    const ss = SpreadsheetApp.openById(SHEET_ID);
+    const sheet = ss.getSheets()[0];
+    
+    // Append to sheet
+    sheet.appendRow([
+      data.timestamp,
+      data.name || 'Anonymous',
+      data.grade,
+      data.subject,
+      data.message
+    ]);
+    
+    // Send Email
+    const emailBody = `
+      มีการแจ้งเรื่องใหม่จากสภาฯ:
+      
+      วันที่: ${data.timestamp}
+      จาก: ${data.name || 'ไม่ระบุชื่อ'} (${data.grade})
+      หัวข้อ: ${data.subject}
+      รายละเอียด: ${data.message}
+    `;
+    
+    MailApp.sendEmail({
+      to: TARGET_EMAIL,
+      subject: `[Council Feedback] ${data.subject}`,
+      body: emailBody
+    });
+    
+    return ContentService.createTextOutput(JSON.stringify({ status: 'success' }))
+      .setMimeType(ContentService.MimeType.JSON);
+      
+  } catch (error) {
+    return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: error.toString() }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function doGet() {
+  // Fetch data to show in submissions.html
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const sheet = ss.getSheets()[0];
+  const data = sheet.getDataRange().getValues();
+  
+  // Skip header row
+  const submissions = data.slice(1).map(row => ({
+    timestamp: row[0],
+    name: row[1],
+    grade: row[2],
+    subject: row[3],
+    message: row[4]
+  }));
+  
+  return ContentService.createTextOutput(JSON.stringify(submissions))
+    .setMimeType(ContentService.MimeType.JSON);
+}
