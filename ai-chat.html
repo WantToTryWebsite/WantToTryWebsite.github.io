@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chat | Want To Try</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="pp-chat-layout">
+    <!-- Navbar Pill Style (Hidden by default, used internally now) -->
+    <div class="pp-navbar-pill" style="display: none;">
+        <a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> หน้าแรก</a>
+        <a href="policies.html" class="nav-link"><i class="fa-solid fa-book-open"></i> นโยบาย</a>
+    </div>
+
+    <main class="pp-chat-window" id="chatWindow">
+        <!-- New Internal Header -->
+        <div class="pp-chat-inner-header">
+            <div class="pp-header-status">
+                <div class="pp-status-dot offline" id="statusDot"></div>
+                <div class="pp-header-info" onclick="handleAdminTrigger()" style="cursor: pointer;">
+                    <span class="pp-ai-name">WantToTry Assistant</span>
+                    <span class="pp-ai-status" id="statusText">ออฟไลน์ • ขณะนี้ยังไม่พร้อมช่วยเหลือ</span>
+                </div>
+            </div>
+            <div class="pp-header-actions">
+                <a href="index.html" class="pp-header-btn" title="กลับหน้าแรก"><i class="fa-solid fa-house"></i></a>
+                <a href="policies.html" class="pp-header-btn" title="ดูนโยบาย"><i class="fa-solid fa-book-open"></i></a>
+                <button onclick="resetChat()" class="pp-header-btn" title="เริ่มใหม่"><i
+                        class="fa-solid fa-rotate-right"></i></button>
+            </div>
+        </div>
+        <!-- Limit Reached Overlay -->
+        <div class="pp-limit-overlay" id="limitOverlay">
+            <i class="fa-solid fa-hourglass-end" style="font-size: 4rem; color: #E63946; margin-bottom: 24px;"></i>
+            <h2>ขออภัยครับ เกินขีดจำกัดแล้ว</h2>
+            <p>วันนี้คุณได้สนทนากับ AI ครบ 30 ข้อความแล้ว ระบบจะเปิดให้ใช้งานอีกครั้งในวันพรุ่งนี้ครับ</p>
+            <div style="margin-top: 30px; display: flex; gap: 15px;">
+                <a href="contact.html" class="btn btn-primary">ติดต่อทีมงาน</a>
+                <button onclick="resetChat()" class="btn btn-techno">ลองใหม่อีกครั้ง</button>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="pp-chat-container" id="scrollContent">
+
+            <!-- Landing View -->
+            <div class="pp-landing-view" id="landingView">
+                <div class="pp-logo-large">
+                    <img src="images/Logo.png" alt="logo" width="50" height="50">
+                    <h1 style="font-weight: 800; color: #112d42; font-size: 2.2rem; letter-spacing: -1.5px; margin: 0;">
+                        WANT TO TRY</h1>
+                    <p
+                        style="color: #E63946; font-weight: 700; letter-spacing: 2px; font-size: 0.9rem; margin: 5px 0 0 0;">
+                        NUMBER 1</p>
+                </div>
+                <p class="pp-tagline" style="margin-top: 20px;">"ผู้ช่วยอัจฉริยะ เพื่อโรงเรียนที่น่าอยู่ขึ้น"</p>
+
+                <p
+                    style="margin-top: 40px; margin-bottom: 20px; font-weight: 600; font-size: 0.85rem; color: var(--color-text-muted);">
+                    ลองถามคำถามเหล่านี้:</p>
+                <div class="pp-suggestions-grid">
+                    <div class="pp-suggestion-card disabled" onclick="alert('ขออภัย ระบบยังไม่พร้อมให้บริการครับ')">
+                        <i class="fa-solid fa-user-tie"></i> รายชื่อผู้สมัครพรรคเบอร์ 1 มีใครบ้าง?
+                    </div>
+                    <div class="pp-suggestion-card disabled" onclick="alert('ขออภัย ระบบยังไม่พร้อมให้บริการครับ')">
+                        <i class="fa-solid fa-graduation-cap"></i> นโยบายด้านการเรียนมีอะไรบ้าง?
+                    </div>
+                    <div class="pp-suggestion-card disabled" onclick="alert('ขออภัย ระบบยังไม่พร้อมให้บริการครับ')">
+                        <i class="fa-solid fa-microphone-lines"></i> กิจกรรม Open Stage คืออะไร?
+                    </div>
+                    <div class="pp-suggestion-card disabled" onclick="alert('ขออภัย ระบบยังไม่พร้อมให้บริการครับ')">
+                        <i class="fa-solid fa-paper-plane"></i> จะติดต่อสภาฯ ได้ที่ไหน?
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Messages -->
+            <div id="chatMessages" style="display: none; flex-direction: column; gap: 24px; padding-top: 20px;"></div>
+
+        </div>
+
+        <!-- Input Area -->
+        <div class="pp-input-fixed-bottom">
+            <div class="pp-input-container" style="background: #f5f5f5; border-color: #ddd;">
+                <input type="text" id="userInput" placeholder="ขออภัย ระบบ AI ยังไม่พร้อมให้บริการขณะนี้..." disabled
+                    style="cursor: not-allowed; opacity: 0.6;">
+                <span class="pp-char-count">0/30</span>
+                <button class="pp-send-btn" id="sendBtn" disabled
+                    style="cursor: not-allowed; background: #ccc; box-shadow: none;">
+                    <i class="fa-solid fa-lock"></i>
+                </button>
+            </div>
+            <p style="font-size: 0.65rem; color: #bbb; text-align: center; margin-top: 12px;">
+                ระบบเก็บข้อมูลการสนทนาแบบไม่ระบุตัวตนเพื่อนำไปพัฒนา AI ต่อไป
+            </p>
+        </div>
+    </main>
+
+    <script>
+        // --- Configuration & Knowledge Base ---
+        const MSG_LIMIT = 100;
+        const STOP_WORDS = ["ครับ", "ค่ะ", "นะ", "จ๊ะ", "หน่อย", "ช่วย", "บอก", "อยาก", "รู้", "คือ", "หา", "แสดง", "ขอ", "มี", "ใคร", "บ้าง", "อะไร", "ตรงไหน", "ยังไง", "ที่ไหน"];
+
+        const KNOWLEDGE_BASE = {
+            policies: [
+                {
+                    keyword: ["clean school", "อุปกรณ์", "รณรงค์", "ความสะอาด", "กวาด", "เศษขยะ", "ถังขยะ", "สะอาด", "โรงเรียนสะอาด"],
+                    response: "นโยบาย <strong>Clean School Support</strong> มุ่งเน้นการสนับสนุนอุปกรณ์และจัดกิจกรรมรณรงค์เพื่อให้ทุกคนช่วยกันรักษาความสะอาดในโรงเรียนครับ 👉 <a href='policies.html#clean' class='citation-tag'>[หน้า: นโยบาย]</a>"
+                },
+                {
+                    keyword: ["ห้องน้ำ", "ห้องน้ํา", "กลิ่น", "สบู่", "น้ํายาลดกลิ่น", "toilet", "fresh toilet", "เหม็น", "ห้องน้ำสะอาด"],
+                    response: "นโยบาย <strong>Fresh Toilet</strong> เราจะบริการน้ำยลดกลิ่นไม่พึงประสงค์ในห้องน้ำ เพื่อให้ห้องน้ำโรงเรียนเราสะอาดและน่าใช้สำหรับทุกคนครับ 👉 <a href='policies.html#clean' class='citation-tag'>[หน้า: นโยบาย]</a>"
+                },
+                {
+                    keyword: ["ธนาคารขยะ", "คัดแยกขยะ", "recycle", "ขยะมีค่า", "แลกแต้ม", "รางวัล", "ขายขยะ", "แต้มสะสม", "ขยะแลกของ"],
+                    response: "<strong>ธนาคารขยะ</strong> เป็นโครงการที่เปลี่ยนขยะให้เป็นแต้มสะสมครับ! คุณสามารถนำขยะมาคัดแยกแล้วแลกเป็นของรางวัลหรือสิทธิพิเศษต่างๆ ได้ 👉 <a href='policies.html#clean' class='citation-tag'>[หน้า: นโยบาย]</a>"
+                },
+                {
+                    keyword: ["star contest", "กิจกรรม open stage", "open stage", "ประกวด", "ดาวเดือน", "ดาวเทียม", "แสดงความสามารถ", "talent", "ร้องเพลง", "เต้น", "เวที", "โชว์"],
+                    response: "โครงการ <strong>Star Contest (Open Stage)</strong> เปิดเวทีให้ทุกคนแสดงความสามารถ ไม่ว่าจะเป็นการประกวดดาวเดือน หรือดาวเทียม เพื่อให้นักเรียนได้ปล่อยของอย่างเต็มที่ครับ 👉 <a href='policies.html#talent' class='citation-tag'>[หน้า: นโยบาย]</a>"
+                },
+                {
+                    keyword: ["ยาเสพติด", "anti-drug", "ห่างไกล", "เชิงรุก", "สิ่งมึนเมา", "บุหรี่ไฟฟ้า", "กัญชา", "เหล้า", "เบียร์", "ต้านยา"],
+                    response: "นโยบาย <strong>Anti-Drug Active</strong> เราเน้นกิจกรรมต้านยาเสพติดเชิงรุก โดยใช้กิจกรรมสร้างสรรค์มาช่วยให้นักเรียนห่างไกลสิ่งมึนเมาครับ 👉 <a href='policies.html#sports' class='citation-tag'>[หน้า: นโยบาย]</a>"
+                },
+                {
+                    keyword: ["กีฬากระชับมิตร", "friendly match", "แข่งบอล", "แข่งกีฬา", "พี่น้อง", "สานสัมพันธ์", "ฟุตบอล", "บาส", "บอล", "กีฬา", "กระชับมิตร"],
+                    response: "<strong>Friendly Match</strong> เป็นกิจกรรมกีฬาสถานสัมพันธ์พี่น้อง เพื่อเชื่อมความผูกพันและสร้างความสนุกสนานผ่านการเล่นกีฬาในโรงเรียนครับ 👉 <a href='policies.html#sports' class='citation-tag'>[หน้า: นโยบาย]</a>"
+                },
+                {
+                    keyword: ["radio", "เสียงตามสาย", "เพลง", "อัปเดตข่าว", "ข่าวสาร", "เที่ยง", "ดีเจ", "จัดรายการ", "เปิดเพลง"],
+                    response: "<strong>School Radio</strong> บริการเสียงตามสายช่วงพักเที่ยงครับ เราจะเปิดเพลงเพราะๆ และอัปเดตข่าวสารในโรงเรียนให้ทุกคนได้ฟัง 👉 <a href='policies.html#fun' class='citation-tag'>[หน้า: นโยบาย]</a>"
+                },
+                {
+                    keyword: ["จดหมาย", "ศว", "ส่งต่อความรัก", "รัก", "ความรู้สึก", "ที่ระลึก", "วาเลนไทน์", "ตู้ไปรษณีย์", "ส.ค.ส", "การ์ด"],
+                    response: "กิจกรรม <strong>ศว. ส่งต่อความรัก</strong> เป็นพื้นที่ให้ทุกคนส่งจดหมายหรือของที่ระลึกแสดงความรู้สึกดีๆ ให้แก่กันในโอกาสพิเศษครับ 👉 <a href='policies.html#fun' class='citation-tag'>[หน้า: นโยบาย]</a>"
+                },
+                {
+                    keyword: ["แจ้งปัญหา", "report", "เว็บแจ้ง", "ติดตามผล", "ซ่อม", "พัง", "เสีย", "หลอดไฟ", "ก๊อกน้ำ", "พัดลม", "พังแจ้งที่ไหน"],
+                    response: "<strong>Report Website</strong> เป็นระบบแจ้งปัญหาในโรงเรียนแบบออนไลน์ครับ เพื่อให้ทีมงานเข้าถึงปัญหาและแก้ไขได้อย่างรวดเร็ว 👉 <a href='policies.html#fun' class='citation-tag'>[หน้า: นโยบาย]</a>"
+                }
+            ],
+            candidates: [
+                {
+                    keyword: ["ประธาน", "ปะธาน", "ฐิรณัชญ์", "บุญนาวงษ์", "เบอร์ 1", "เบอร์1", "ผู้นำ"],
+                    response: `
+                        พบข้อมูลประธานนักเรียน หมายเลข 1 ครับ:
+                        <div class="pp-candidate-card-ai">
+                            <div class="pp-candidate-img-mini">
+                                <img src="images/candidates/01_president/1-IMG_9981.jpg" alt="นางสาวฐิรณัชญ์ บุยนาวงษ์">
+                            </div>
+                            <div class="pp-candidate-info">
+                                <div class="pp-candidate-name">นางสาวฐิรณัชญ์ บุญนาวงษ์</div>
+                                <div class="pp-candidate-role">ประธานนักเรียน</div>
+                                <div class="pp-candidate-badge">เบอร์ 1 <i class="fa-solid fa-check"></i></div>
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    keyword: ["รองประธานคนที่ 1", "รอง 1", "ณัธนนท์", "วุ่นนา"],
+                    response: `
+                        พบข้อมูลรองประธานคนที่ 1 ครับ:
+                        <div class="pp-candidate-card-ai">
+                            <div class="pp-candidate-img-mini">
+                                <img src="images/candidates/02_vice_1/1-IMG_0006.jpg" alt="นายณัธนนท์ วุ่นนา">
+                            </div>
+                            <div class="pp-candidate-info">
+                                <div class="pp-candidate-name">นายณัธนนท์ วุ่นนา</div>
+                                <div class="pp-candidate-role">รองประธานนักเรียนคนที่ 1</div>
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    keyword: ["รองประธานคนที่ 2", "รอง 2", "วิลาสินี", "ปู่สุข"],
+                    response: `
+                        พบข้อมูลรองประธานคนที่ 2 ครับ:
+                        <div class="pp-candidate-card-ai">
+                            <div class="pp-candidate-img-mini">
+                                <img src="images/candidates/03_vice_2/1-IMG_0029.jpg" alt="นางสาววิลาสินี ปู่สุข">
+                            </div>
+                            <div class="pp-candidate-info">
+                                <div class="pp-candidate-name">นางสาววิลาสินี ปู่สุข</div>
+                                <div class="pp-candidate-role">รองประธานนักเรียนคนที่ 2</div>
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    keyword: ["เลขานุการ", "เลขา", "จักพันธ์", "โพาคาประเสริฐ"],
+                    response: `
+                        พบข้อมูลคณะกรรมการฝ่ายเลขานุการครับ:
+                        <div class="pp-candidate-card-ai">
+                            <div class="pp-candidate-img-mini">
+                                <img src="images/candidates/04_secretary/3-IMG_7082.jpg" alt="นายจักพันธ์ โพาคาประเสริฐ">
+                            </div>
+                            <div class="pp-candidate-info">
+                                <div class="pp-candidate-name">นายจักพันธ์ โพาคาประเสริฐ</div>
+                                <div class="pp-candidate-role">คณะกรรมการฝ่ายเลขานุการ</div>
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    keyword: ["ประชาสัมพันธ์", "ประชา", "ปุญญานันท์", "สำราญจิตร์"],
+                    response: `
+                        พบข้อมูลคณะกรรมการฝ่ายประชาสัมพันธ์ครับ:
+                        <div class="pp-candidate-card-ai">
+                            <div class="pp-candidate-img-mini">
+                                <img src="images/candidates/05_pr/1-IMG_5580.jpg" alt="นางสาวปุญญานันท์ สำราญจิตร์">
+                            </div>
+                            <div class="pp-candidate-info">
+                                <div class="pp-candidate-name">นางสาวปุญญานันท์ สำราญจิตร์</div>
+                                <div class="pp-candidate-role">คณะกรรมการฝ่ายประชาสัมพันธ์</div>
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    keyword: ["เหรัญญิก", "เงิน", "เฉลิมชนม์", "คนชม"],
+                    response: `
+                        พบข้อมูลคณะกรรมการฝ่ายเหรัญญิกครับ:
+                        <div class="pp-candidate-card-ai">
+                            <div class="pp-candidate-img-mini">
+                                <img src="images/candidates/06_treasurer/1-IMG_7023.jpg" alt="นายเฉลิมชนม์ คนชม">
+                            </div>
+                            <div class="pp-candidate-info">
+                                <div class="pp-candidate-name">นายเฉลิมชนม์ คนชม</div>
+                                <div class="pp-candidate-role">คณะกรรมการฝ่ายเหรัญญิก</div>
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    keyword: ["ฝ่ายปกครอง", "ปกครอง", "ธนภัทร", "สุวรรณประดิษฐ์"],
+                    response: `
+                        พบข้อมูลคณะกรรมการฝ่ายปกครองครับ:
+                        <div class="pp-candidate-card-ai">
+                            <div class="pp-candidate-img-mini">
+                                <img src="images/candidates/07_discipline/1-IMG_9996.jpg" alt="นายธนภัทร สุวรรณประดิษฐ์">
+                            </div>
+                            <div class="pp-candidate-info">
+                                <div class="pp-candidate-name">นายธนภัทร สุวรรณประดิษฐ์</div>
+                                <div class="pp-candidate-role">คณะกรรมการฝ่ายปกครอง</div>
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    keyword: ["ประธานฝ่ายกิจกรรม", "หัวหน้าฝ่ายกิจกรรม", "ฝ่ายกิจกรรม", "ธนดล", "แสงอรุณ"],
+                    response: `
+                        พบข้อมูลคณะกรรมการฝ่ายกิจกรรมครับ:
+                        <div class="pp-candidate-card-ai">
+                            <div class="pp-candidate-img-mini">
+                                <img src="images/candidates/08_activities/1-IMG_7125.jpg" alt="นายธนดล แสงอรุณ">
+                            </div>
+                            <div class="pp-candidate-info">
+                                <div class="pp-candidate-name">นายธนดล แสงอรุณ</div>
+                                <div class="pp-candidate-role">คณะกรรมการฝ่ายกิจกรรม</div>
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    keyword: ["วิชาการ", "ฝ่ายวิชาการ", "ณัชชาพัชร์", "พุทธขันธ์"],
+                    response: `
+                        พบข้อมูลคณะกรรมการฝ่ายวิชาการครับ:
+                        <div class="pp-candidate-card-ai">
+                            <div class="pp-candidate-img-mini">
+                                <img src="images/candidates/09_academic/1-IMG_5557.jpg" alt="นางสาวณัชชาพัชร์ พุทธขันธ์">
+                            </div>
+                            <div class="pp-candidate-info">
+                                <div class="pp-candidate-name">นางสาวณัชชาพัชร์ พุทธขันธ์</div>
+                                <div class="pp-candidate-role">คณะกรรมการฝ่ายวิชาการ</div>
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    keyword: ["ปฏิคม", "ปฏิ", "ศุภกฤษ์", "หอมขจร"],
+                    response: `
+                        พบข้อมูลคณะกรรมการฝ่ายปฏิคมครับ:
+                        <div class="pp-candidate-card-ai">
+                            <div class="pp-candidate-img-mini">
+                                <img src="images/candidates/10_host/3-IMG_7058.jpg" alt="นายศุภกฤษ์ หอมขจร">
+                            </div>
+                            <div class="pp-candidate-info">
+                                <div class="pp-candidate-name">นายศุภกฤษ์ หอมขจร</div>
+                                <div class="pp-candidate-role">คณะกรรมการฝ่ายปฏิคม</div>
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    keyword: ["ทีม", "สมาชิก", "คนอื่น", "พรรค", "ทีมงาน", "เบอร์ 1 มีใคร", "มีใครบ้าง"],
+                    response: `
+                        พรรค <strong>Want To Try</strong> ของเราประกอบด้วยสมาชิก 10 ท่านดังนี้ครับ:
+                        <ul style="margin: 10px 0; padding-left: 20px; font-size: 0.85rem; line-height: 1.5; color: #444;">
+                            <li><strong>1. นางสาวฐิรณัชญ์ บุญนาวงษ์</strong> (ประธานนักเรียน)</li>
+                            <li><strong>2. นายณัธนนท์ วุ่นนา</strong> (รองประธานนักเรียนคนที่ 1)</li>
+                            <li><strong>3. นางสาววิลาสินี ปู่สุข</strong> (รองประธานนักเรียนคนที่ 2)</li>
+                            <li><strong>4. นายจักพันธ์ โพาคาประเสริฐ</strong> (ฝ่ายเลขานุการ)</li>
+                            <li><strong>5. นางสาวปุญญานันท์ สำราญจิตร์</strong> (ฝ่ายประชาสัมพันธ์)</li>
+                            <li><strong>6. นายเฉลิมชนม์ คนชม</strong> (ฝ่ายเหรัญญิก)</li>
+                            <li><strong>7. นายธนภัทร สุวรรณประดิษฐ์</strong> (ฝ่ายปกครอง)</li>
+                            <li><strong>8. นายธนดล แสงอรุณ</strong> (ฝ่ายกิจกรรม)</li>
+                            <li><strong>9. นางสาวณัชชาพัชร์ พุทธขันธ์</strong> (ฝ่ายวิชาการ)</li>
+                            <li><strong>10. นายศุภกฤษ์ หอมขจร</strong> (ฝ่ายปฏิคม)</li>
+                        </ul>
+                        สามารถดูรายละเอียดและประวัติของทุกคนเพิ่มเติมได้ที่นี่ครับ 👉 <a href='candidates.html' class='citation-tag'>[ดูทีมงานทั้งหมด]</a>
+                    `
+                }
+            ],
+            general: [
+                {
+                    keyword: ["ติดต่อ", "เสนอ", "ร้องเรียน", "แจ้งปัญหา", "เบอร์โทร", "เฟซบุ๊ก"],
+                    response: "คุณสามารถส่งข้อเสนอแนะหรือร้องเรียนปัญหาต่างๆ ได้ผ่านหน้าติดต่อ หรือติดตามข่าวสารได้ทาง Facebook และ Instagram ครับ 👉 <a href='contact.html' class='citation-tag'>[หน้า: ติดต่อ]</a>"
+                },
+                {
+                    keyword: ["พรรค", "คืออะไร", "want to try", "จุดเด่น", "คอนเซปต์", "เด็กอยากลอง"],
+                    response: "<strong>Want To Try | เด็กอยากลอง</strong> มุ่งเน้นการสร้างโรงเรียนที่น่าอยู่ขึ้นผ่านนโยบายที่ทำได้จริง กล้านำ ทำจริง เพื่อพัฒนาโรงเรียนของเราครับ 👉 <a href='about.html' class='citation-tag'>[รู้จักพรรคเรา]</a>"
+                },
+                {
+                    keyword: ["สวัสดี", "หัดดี", "หวัดดี", "ไฮ", "hello", "hi", "ดีจ้า"],
+                    response: "สวัสดีครับ! ผม AI Assistant จากพรรค Want To Try มีอะไรให้ผมช่วยหาข้อมูลเกี่ยวกับนโยบายหรือทีมงานไหมครับ? พิมพ์ถามมาได้เลยครับ! 😊"
+                },
+                {
+                    keyword: ["ขอบคุณ", "แต๊ง", "thanks"],
+                    response: "ยินดีให้บริการเสมอครับ! อย่าลืมเลือก <strong>เบอร์ 1 พรรค Want To Try</strong> นะครับ! ❤️"
+                }
+            ]
+        };
+
+        // --- Core Elements ---
+        const input = document.getElementById('userInput');
+        const usageCounter = document.getElementById('usageCounter');
+        const landingView = document.getElementById('landingView');
+        const chatMessages = document.getElementById('chatMessages');
+        const scrollContent = document.getElementById('scrollContent');
+        const limitOverlay = document.getElementById('limitOverlay');
+        const sendBtn = document.getElementById('sendBtn');
+
+        // --- State Management ---
+        let currentUsage = parseInt(localStorage.getItem('chat_usage') || '0');
+        let isAdminMode = localStorage.getItem('admin_mode') === 'true';
+        let isProcessing = false;
+        let adminClickCount = 0;
+        let adminTimer = null;
+
+        // Reset usage if day changed
+        const today = new Date().toDateString();
+        const lastVisit = localStorage.getItem('last_chat_date');
+        if (lastVisit !== today) {
+            currentUsage = 0;
+            localStorage.setItem('chat_usage', '0');
+            localStorage.setItem('last_chat_date', today);
+        }
+
+        // --- Admin Mode Logic ---
+        function handleAdminTrigger() {
+            adminClickCount++;
+            clearTimeout(adminTimer);
+            adminTimer = setTimeout(() => { adminClickCount = 0; }, 2000);
+
+            if (adminClickCount >= 5) {
+                isAdminMode = !isAdminMode;
+                localStorage.setItem('admin_mode', isAdminMode);
+                applyAdminMode();
+                adminClickCount = 0;
+                alert(isAdminMode ? "🚨 Admin Mode: เปิดใช้งาน (สำหรับการทดสอบ)" : "🔒 Admin Mode: ปิดใช้งาน");
+            }
+        }
+
+        function applyAdminMode() {
+            const statusDot = document.getElementById('statusDot');
+            const statusText = document.getElementById('statusText');
+            const suggestions = document.querySelectorAll('.pp-suggestion-card');
+
+            if (isAdminMode) {
+                statusDot.className = 'pp-status-dot admin-active pulse';
+                statusDot.classList.add('admin-active'); // Ensure color is applied
+                statusText.innerText = 'Admin Mode • กำลังทดสอบระบบ';
+                input.disabled = false;
+                input.placeholder = 'แอดมิน: พิมพ์เพื่อทดสอบระบบ...';
+                input.style.cursor = 'text';
+                input.style.opacity = '1';
+                sendBtn.disabled = false;
+                sendBtn.style.cursor = 'pointer';
+                sendBtn.style.opacity = '1';
+                sendBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i>';
+                sendBtn.style.background = 'var(--color-primary-blue)';
+
+                suggestions.forEach(card => {
+                    card.classList.remove('disabled');
+                    card.onclick = function () {
+                        const question = this.querySelector('.pp-suggestion-text')?.innerText || this.innerText.trim();
+                        setQuestion(question);
+                    };
+                });
+            } else {
+                statusDot.className = 'pp-status-dot offline';
+                statusText.innerText = 'ออฟไลน์ • ขณะนี้ยังไม่พร้อมช่วยเหลือ';
+                input.disabled = true;
+                input.placeholder = 'ขออภัย ระบบ AI ยังไม่พร้อมให้บริการขณะนี้...';
+                input.style.cursor = 'not-allowed';
+                input.style.opacity = '0.6';
+                sendBtn.disabled = true;
+                sendBtn.style.cursor = 'not-allowed';
+                sendBtn.innerHTML = '<i class="fa-solid fa-lock"></i>';
+                sendBtn.style.background = '#ccc';
+
+                suggestions.forEach(card => {
+                    card.classList.add('disabled');
+                    card.onclick = function () { alert('ขออภัย ระบบยังไม่พร้อมให้บริการครับ'); };
+                });
+            }
+        }
+
+        // --- UI Utils ---
+        function scrollToBottom() {
+            scrollContent.scrollTo({
+                top: scrollContent.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+
+        function toggleInputState(enabled) {
+            if (isAdminMode) {
+                input.disabled = !enabled;
+                sendBtn.disabled = !enabled;
+                input.style.opacity = enabled ? '1' : '0.7';
+                sendBtn.style.opacity = enabled ? '1' : '0.7';
+                sendBtn.style.cursor = enabled ? 'pointer' : 'not-allowed';
+            }
+        }
+
+        function updateCounterUI() {
+            if (usageCounter) usageCounter.innerText = currentUsage;
+            if (currentUsage >= MSG_LIMIT) {
+                limitOverlay.classList.add('show');
+            } else {
+                limitOverlay.classList.remove('show');
+            }
+        }
+
+        function setQuestion(text) {
+            input.value = text;
+            processMessage();
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') processMessage();
+        }
+
+        function resetChat() {
+            localStorage.setItem('chat_usage', '0');
+            location.reload();
+        }
+
+        // --- AI Engine ---
+        async function processMessage() {
+            if (isProcessing) return;
+
+            if (!isAdminMode) {
+                alert("ขออภัย ระบบ AI ยังไม่พร้อมให้บริการในขณะนี้ เนื่องจากกำลังอยู่ระหว่างการพัฒนาข้อมูลครับ");
+                return;
+            }
+
+            const text = input.value.trim();
+            if (!text || (currentUsage >= MSG_LIMIT && !isAdminMode)) return;
+
+            isProcessing = true;
+            toggleInputState(false);
+
+            if (!isAdminMode) { // Only increment usage if not in admin mode
+                currentUsage++;
+                localStorage.setItem('chat_usage', currentUsage);
+                updateCounterUI();
+            }
+
+            landingView.style.display = 'none';
+            chatMessages.style.display = 'flex';
+            input.value = '';
+
+            addMessage(text, 'user');
+
+            const thinkingBox = createThinkingBox();
+            chatMessages.appendChild(thinkingBox);
+            scrollToBottom();
+
+            // Step 1: NLU Analysis
+            await runStep(thinkingBox, 1);
+
+            // Normalize query (remove stopwords)
+            let query = text.toLowerCase().trim();
+            STOP_WORDS.forEach(word => {
+                query = query.split(word).join("");
+            });
+            query = query.trim();
+
+            const keywordsFound = [];
+            for (let category in KNOWLEDGE_BASE) {
+                for (let item of KNOWLEDGE_BASE[category]) {
+                    item.keyword.forEach(k => {
+                        const kw = k.toLowerCase();
+                        if (query.includes(kw) || text.toLowerCase().includes(kw)) {
+                            if (!keywordsFound.includes(k)) keywordsFound.push(k);
+                        }
+                    });
+                }
+            }
+            addLog(thinkingBox, 1, keywordsFound.length > 0 ? `วิเคราะห์เจตนาพบ: ${keywordsFound.slice(0, 3).join(', ')}${keywordsFound.length > 3 ? '...' : ''}` : 'ไม่พบคำสำคัญชัดเจน กำลังวิเคราะห์เชิงลึก...');
+
+            // Step 2: Database Search & Enhanced Scoring
+            await runStep(thinkingBox, 2);
+            let bestMatch = null;
+            let highestScore = 0;
+            let matchesCount = 0;
+
+            for (let category in KNOWLEDGE_BASE) {
+                for (let item of KNOWLEDGE_BASE[category]) {
+                    let itemScore = 0;
+                    let matchedInThisItem = 0;
+
+                    for (let k of item.keyword) {
+                        const keyword = k.toLowerCase();
+                        if (query.includes(keyword) || text.toLowerCase().includes(keyword)) {
+                            itemScore += (keyword.length * 10);
+                            matchedInThisItem++;
+
+                            // Exact match bonus (against original text or cleaned query)
+                            if (text.toLowerCase().trim() === keyword || query === keyword) {
+                                itemScore += 150;
+                            }
+                        }
+                    }
+
+                    // Density Bonus: Reward entries that match multiple unique keywords
+                    if (matchedInThisItem > 1) {
+                        itemScore *= (1 + (matchedInThisItem * 0.2));
+                    }
+
+                    if (matchedInThisItem > 0) {
+                        matchesCount++;
+                        if (itemScore > highestScore) {
+                            highestScore = Math.floor(itemScore);
+                            bestMatch = item.response;
+                        }
+                    }
+                }
+            }
+            addLog(thinkingBox, 2, bestMatch ? `พบข้อมูล (${matchesCount} รายการ) Scoring: ${highestScore.toFixed(0)}` : 'ไม่พบข้อมูลที่ตรงกัน กำลังใช้คำตอบทั่วไป');
+
+            // Step 3: Response Construction
+            await runStep(thinkingBox, 3);
+            const finalResponse = bestMatch || "ขอบคุณสำหรับคำถามครับ! ผมยังหาข้อมูลเรื่องนี้ไม่เจอในฐานข้อมูล แต่อาจมีข้อมูลเพิ่มเติมในหน้า <a href='policies.html' class='citation-tag'>นโยบาย</a> หรือ <a href='candidates.html' class='citation-tag'>ทีมงาน</a> ครับ";
+            addLog(thinkingBox, 3, 'กำลังจัดรูปแบบคำตอบที่เหมาะสม...');
+
+            await new Promise(r => setTimeout(r, 600));
+
+            thinkingBox.remove();
+            addMessage(finalResponse, 'bot');
+
+            isProcessing = false;
+            toggleInputState(true);
+        }
+
+        function addMessage(text, type) {
+            const div = document.createElement('div');
+            div.className = `pp-${type}-message`;
+            div.innerHTML = text;
+            chatMessages.appendChild(div);
+            scrollToBottom();
+        }
+
+        function createThinkingBox() {
+            const div = document.createElement('div');
+            div.className = 'pp-thinking-box';
+            div.innerHTML = `
+                <div class="pp-thinking-header">
+                    <span><i class="fa-solid fa-microchip"></i> AI Processing</span>
+                    <span style="color: #457B9D;"><i class="fa-solid fa-circle-notch fa-spin"></i> กำลังวิเคราะห์...</span>
+                </div>
+                <div id="step-1" class="pp-step active">
+                    <div class="pp-step-icon">1</div>
+                    <span>วิเคราะห์เจตนาของคำถาม (NLU)</span>
+                </div>
+                <div id="step-2" class="pp-step">
+                    <div class="pp-step-icon">2</div>
+                    <span>สืบค้นฐานข้อมูลนโยบายและผู้สมัคร</span>
+                </div>
+                <div id="step-3" class="pp-step">
+                    <div class="pp-step-icon">3</div>
+                    <span>ประมวลผลคำตอบที่เหมาะสมที่สุด</span>
+                </div>
+            `;
+            return div;
+        }
+
+        function runStep(box, stepNum) {
+            return new Promise(resolve => {
+                const step = box.querySelector(`#step-${stepNum}`);
+                setTimeout(() => {
+                    step.classList.remove('active');
+                    step.classList.add('done');
+                    step.querySelector('.pp-step-icon').innerHTML = '<i class="fa-solid fa-check"></i>';
+                    const nextStep = box.querySelector(`#step-${stepNum + 1}`);
+                    if (nextStep) nextStep.classList.add('active');
+                    scrollToBottom();
+                    resolve();
+                }, 700 + Math.random() * 500);
+            });
+        }
+
+        function addLog(box, stepNum, text) {
+            const step = box.querySelector(`#step-${stepNum}`);
+            const log = document.createElement('span');
+            log.className = 'pp-step-log';
+            log.innerText = text;
+            step.parentNode.insertBefore(log, step.nextSibling);
+            scrollToBottom();
+        }
+
+        // --- Initialization ---
+        window.addEventListener('DOMContentLoaded', () => {
+            applyAdminMode();
+            updateCounterUI();
+        });
+    </script>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submissions | Want To Try</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .submission-card {
+            background: white;
+            border-radius: var(--border-radius-md);
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-sm);
+            border-left: 5px solid var(--color-primary-red);
+            transition: var(--transition-normal);
+        }
+
+        .submission-card:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .submission-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+        }
+
+        .submission-tag {
+            background: rgba(69, 123, 157, 0.1);
+            color: var(--color-primary-blue);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .submission-subject {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--color-text-main);
+        }
+
+        .submission-content {
+            white-space: pre-line;
+            color: #444;
+        }
+
+        .loading-container {
+            text-align: center;
+            padding: 50px;
+        }
+
+        #submissionsList:empty::after {
+            content: "ยังไม่มีข้อมูลการแจ้งเรื่องในขณะนี้";
+            display: block;
+            text-align: center;
+            padding: 50px;
+            color: var(--color-text-muted);
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar scrolled">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <i class="fa-solid fa-hand-fist"></i>
+                <div class="logo-text">
+                    <div class="logo-row">Want To Try<span class="sep">|</span> <span>เด็กอยากลอง</span>
+                    </div>
+                </div>
+            </a>
+
+            <div class="nav-links">
+                <a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> หน้าแรก</a>
+                <a href="contact.html" class="nav-link active"><i class="fa-solid fa-phone"></i> ติดต่อ</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header" style="background: white; padding-top: 120px;">
+        <div class="container">
+            <h1 class="page-title">รายการความผิด/ข้อเสนอแนะ</h1>
+            <p class="page-subtitle">แสดงข้อมูลที่นักเรียนแจ้งเข้ามาผ่านหน้าติดต่อสภาฯ</p>
+        </div>
+    </header>
+
+    <!-- Submissions Content -->
+    <section class="section bg-light">
+        <div class="container" style="max-width: 800px;">
+            <div id="loadingSubmissions" class="loading-container">
+                <div class="loading-spinner"
+                    style="border-top-color: var(--color-primary-red); width: 40px; height: 40px;"></div>
+                <p style="margin-top: 15px; color: var(--color-text-muted);">กำลังโหลดข้อมูลจากระบบ...</p>
+            </div>
+
+            <div id="submissionsList"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 Want To Try Party. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const listContainer = document.getElementById('submissionsList');
+            const loader = document.getElementById('loadingSubmissions');
+
+            // IMPORTANT: Replace with your actual Apps Script URL
+            const scriptURL = 'REPLACE_WITH_YOUR_APPS_SCRIPT_URL';
+
+            if (scriptURL === 'REPLACE_WITH_YOUR_APPS_SCRIPT_URL') {
+                // Mock Data for demonstration
+                setTimeout(() => {
+                    const mockData = [
+                        {
+                            timestamp: new Date().toISOString(),
+                            name: "ธีรเดช เดชสูงเนิน",
+                            grade: "ม.6",
+                            subject: "เสนอแนะเรื่องโรงอาหาร",
+                            message: "อยากให้มีเมนูสุขภาพเพิ่มขึ้นในโรงอาหารครับ"
+                        },
+                        {
+                            timestamp: new Date().toISOString(),
+                            name: "Anonymous",
+                            grade: "ม.4",
+                            subject: "แจ้งซ่อมไฟ",
+                            message: "ไฟทางเดินหลังอาคาร 3 ดับครับ มืดมากตอนเลิกเรียน"
+                        }
+                    ];
+                    renderSubmissions(mockData);
+                }, 1000);
+                return;
+            }
+
+            try {
+                const response = await fetch(scriptURL);
+                const data = await response.json();
+                renderSubmissions(data);
+            } catch (error) {
+                console.error('Error fetching submissions:', error);
+                loader.innerHTML = '<p style="color: var(--color-primary-red);"><i class="fa-solid fa-circle-exclamation"></i> ไม่สามารถโหลดข้อมูลได้ในขณะนี้</p>';
+            }
+
+            function renderSubmissions(items) {
+                loader.style.display = 'none';
+                listContainer.innerHTML = '';
+
+                items.reverse().forEach(item => {
+                    const date = new Date(item.timestamp).toLocaleString('th-TH');
+                    const card = document.createElement('div');
+                    card.className = 'submission-card';
+                    card.innerHTML = `
+                        <div class="submission-meta">
+                            <span><i class="fa-solid fa-user"></i> ${item.name || 'ไม่ระบุชื่อ'} (${item.grade || 'ไม่ระบุชั้น'})</span>
+                            <span class="submission-tag">${date}</span>
+                        </div>
+                        <div class="submission-subject">${item.subject}</div>
+                        <div class="submission-content">${item.message}</div>
+                    `;
+                    listContainer.appendChild(card);
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

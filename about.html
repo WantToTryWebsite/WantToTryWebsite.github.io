@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | Want To Try</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="images/Logo.png" alt="logo" width="40" height="40">
+                <div class="logo-text">
+                    <div class="logo-row">Want To Try<span class="sep">|</span> <span class="black">เด็กอยากลอง</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Hamburger Menu Button -->
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">
+                    <i class="fa-solid fa-house"></i>
+                    <div class="nav-text"><span>หน้าแรก</span></div>
+                </a>
+                <a href="about.html" class="nav-link">
+                    <i class="fa-solid fa-users"></i>
+                    <div class="nav-text"><span>รู้จักพรรค</span></div>
+                </a>
+                <a href="candidates.html" class="nav-link">
+                    <i class="fa-solid fa-user-tie"></i>
+                    <div class="nav-text"><span>ผู้สมัคร</span></div>
+                </a>
+                <a href="policies.html" class="nav-link">
+                    <i class="fa-solid fa-book-open"></i>
+                    <div class="nav-text"><span>นโยบายพรรค</span></div>
+                </a>
+                <div class="nav-btn-wrapper">
+                    <a href="news.html" class="nav-link">
+                        <i class="fa-solid fa-newspaper"></i>
+                        <div class="nav-text"><span>ข่าวสาร</span></div>
+                    </a>
+                    <div class="dev-badge-small">
+                        <i class="fa-solid fa-wrench"></i> กำลังพัฒนา
+                    </div>
+                </div>
+                <div class="nav-btn-wrapper">
+                    <a href="contact.html" class="nav-link">
+                        <i class="fa-solid fa-phone"></i>
+                        <div class="nav-text"><span>ติดต่อ</span></div>
+                    </a>
+                    <div class="dev-badge-small">
+                        <i class="fa-solid fa-wrench"></i> กำลังพัฒนา
+                    </div>
+                </div>
+
+                <div class="ai-btn-wrapper">
+                    <a href="ai-chat.html" class="btn btn-techno nav-link">
+                        <i class="fa-solid fa-robot"></i>
+                        <div class="nav-text"><span>คุยกับ AI</span></div>
+                    </a>
+                    <div class="dev-badge">
+                        <i class="fa-solid fa-wrench"></i> กำลังพัฒนา
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <h1 class="page-title">รู้จัก <span style="color: var(--color-primary-red);">Want To Try</span></h1>
+            <p class="page-subtitle">ทำไมต้อง "อยากลอง"? มาค้นหาคำตอบและรู้จักตัวตนของพวกเราให้มากขึ้น</p>
+        </div>
+    </header>
+
+    <!-- Content Sections -->
+    <section class="section">
+        <div class="container">
+            <div class="split-layout">
+                <div class="split-content">
+                    <h2 class="section-title">Why <span style="color: var(--color-primary-blue);">Want To Try?</span>
+                    </h2>
+                    <p class="lead-text">"เพราะเราเชื่อว่า การเปลี่ยนแปลงเริ่มต้นจากการกล้าที่จะลอง"</p>
+                    <p>พรรค Want To Try คือคำว่าเด็กอยากลอง พวกเราก็เป็นเด็กรุ่นใหม่ที่อยากจะลองแก้ปัญหา
+                        และพัฒนาโรงเรียนในด้านต่างๆให้ดียิ่งขึ้น</p>
+                    <div class="divider-line"></div>
+                    <p>เราไม่ใช่แค่นักเรียนที่มาทำหน้าที่สภาฯ แต่เราคือเพื่อน พี่ น้อง
+                        ที่พร้อมจะเป็นกระบอกเสียงและลงมือทำให้โรงเรียนของเราน่าอยู่ยิ่งขึ้น</p>
+                </div>
+                <div class="split-image">
+                    <div class="feature-image-wrapper">
+                        <img src="images/6-IMG_7212.jpg" alt="กิจกรรมพรรค Want To Try">
+                        <div class="image-caption">ภาพของพวกเรา</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section bg-light">
+        <div class="container">
+            <div class="section-header text-center">
+                <h2>จุดยืนของเรา</h2>
+                <div class="h-line mx-auto"></div>
+            </div>
+
+            <div class="values-grid">
+                <div class="value-card">
+                    <div class="icon-box red">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+                    <h3>ความคิดสร้างสรรค์</h3>
+                    <p>นำเสนอไอเดียใหม่ๆ ที่สร้างสรรค์และแตกต่าง เพื่อแก้ปัญหาเดิมๆ ที่เรื้อรัง</p>
+                </div>
+                <div class="value-card">
+                    <div class="icon-box blue">
+                        <i class="fa-solid fa-hands-holding-circle"></i>
+                    </div>
+                    <h3>ลงมือทำจริง</h3>
+                    <p>ไม่รอให้โอกาสวิ่งมาหา แต่พร้อมจะลงมือทำทันทีเมื่อเห็นสิ่งที่ควรทำ</p>
+                </div>
+                <div class="value-card">
+                    <div class="icon-box dark">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <h3>เข้าถึงง่าย</h3>
+                    <p>เปิดใจรับฟังทุกความคิดเห็น เพราะทุกเสียงของนักเรียนคือสิ่งสำคัญที่สุด</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="highlight-box">
+                <div class="highlight-content">
+                    <h2>เป้าหมายของพวกเรา</h2>
+                    <ul class="check-list">
+                        <li><i class="fa-solid fa-circle-check"></i>
+                            ทำให้โรงเรียนสะอาดขึ้นและพัฒนาโรงเรียนในทุกๆด้าน</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>Want To Try</h3>
+                    <p>กล้านำ ทำจริง <br>
+                        แล้วพวกเราจะมาช่วยกันพัฒนาโรงเรียนของพวกเราให้น่าอยู่มากยิ่งขึ้นไปพร้อมกันครับ💚💛🖤</p>
+                </div>
+                <div class="footer-links">
+                    <h4>เมนูลัด</h4>
+                    <ul>
+                        <li><a href="about.html">เกี่ยวกับเรา</a></li>
+                        <li><a href="policies.html">นโยบาย</a></li>
+                        <li><a href="candidates.html">ทีมงาน</a></li>
+                        <li><a href="ai-chat.html">AI Helper</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>ติดต่อเรา</h4>
+                    <ul>
+                        <li><a href="#"><i class="fa-brands fa-facebook"></i> Want To Try Party(ยังไม่พร้อม)</a></li>
+                        <li><a
+                                href="https://www.instagram.com/want.to.try.number1?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="><i
+                                    class="fa-brands fa-instagram"></i> WANT TO TRY</a></li>
+                        <li><a href="#"><i class="fa-brands fa-line"></i> @wanttotry(ยังไม่พร้อม)</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>สื่อหาเสียงอิเล็กทรอนิกส์นี้ผลิตโดยพรรคเด็กอยากลอง</p>
+                <p>&copy; 2026 Want To Try Party. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Action Button -->
+    <div class="fab-container" id="quickContactFab">
+        <div class="fab-menu">
+            <h4><i class="fa-solid fa-bolt"></i> ติดต่อด่วน</h4>
+            <p>มีคำถามหรือข้อสงสัย? พิมพ์คุยกับ AI หรือส่งข้อความหาเราได้ทันที</p>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <a href="ai-chat.html" class="btn btn-techno">
+                    <i class="fa-solid fa-robot"></i> คุยกับ AI
+                </a>
+                <a href="contact.html" class="btn btn-primary">
+                    <i class="fa-solid fa-paper-plane"></i> ส่งข้อความถึงเรา
+                </a>
+            </div>
+        </div>
+        <button class="fab-button">
+            <i class="fa-solid fa-message"></i>
+        </button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

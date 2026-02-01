@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidates | Want To Try</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="dark-theme">
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="images/Logo.png" alt="logo" width="40" height="40">
+                <div class="logo-text">
+                    <div class="logo-row">Want To Try<span class="sep">|</span> <span class="white">เด็กอยากลอง</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Hamburger Menu Button -->
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <div class="nav-linkss">
+                <a href="index.html" class="nav-link">
+                    <i class="fa-solid fa-house"></i>
+                    <div class="nav-text"><span class="nav-text">หน้าแรก</span></div>
+                </a>
+                <a href="about.html" class="nav-link">
+                    <i class="fa-solid fa-users"></i>
+                    <div class="nav-text"><span class="white">รู้จักพรรค</span></div>
+                </a>
+                <a href="candidates.html" class="nav-link">
+                    <i class="fa-solid fa-user-tie"></i>
+                    <div class="nav-text"><span class="white">ผู้สมัคร</span></div>
+                </a>
+                <a href="policies.html" class="nav-link">
+                    <i class="fa-solid fa-book-open"></i>
+                    <div class="nav-text"><span class="white">นโยบายพรรค</span></div>
+                </a>
+                <div class="nav-btn-wrapper">
+                    <a href="news.html" class="nav-link">
+                        <i class="fa-solid fa-newspaper"></i>
+                        <div class="nav-text"><span class="white">ข่าวสาร</span></div>
+                    </a>
+                    <div class="dev-badge-small">
+                        <i class="fa-solid fa-wrench"></i> กำลังพัฒนา
+                    </div>
+                </div>
+                <div class="nav-btn-wrapper">
+                    <a href="contact.html" class="nav-link">
+                        <i class="fa-solid fa-phone"></i>
+                        <div class="nav-text"><span class="white">ติดต่อ</span></div>
+                    </a>
+                    <div class="dev-badge-small">
+                        <i class="fa-solid fa-wrench"></i> กำลังพัฒนา
+                    </div>
+                </div>
+
+                <div class="ai-btn-wrapper">
+                    <a href="ai-chat.html" class="btn btn-techno nav-link">
+                        <i class="fa-solid fa-robot"></i>
+                        <div class="nav-text"><span class="white">คุยกับ AI</span></div>
+                    </a>
+                    <div class="dev-badge">
+                        <i class="fa-solid fa-wrench"></i> กำลังพัฒนา
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- President Section -->
+    <section class="president-section">
+        <div class="president-container">
+            <span class="president-label">ประธานนักเรียน</span>
+
+            <div class="president-image-wrapper" onclick="openCandidateModal(1)" style="cursor: pointer;">
+                <img src="images/candidates/01_president/1-IMG_9981.jpg" alt="ประธานนักเรียน">
+            </div>
+
+            <div class="president-info">
+                <h1>นางสาวฐิรณัชญ์ บุญนาวงษ์</h1>
+                <p class="president-quote">""</p>
+                <div class="president-actions">
+                    <button class="btn-president" onclick="openCandidateModal(1)">
+                        ดูวิสัยทัศน์ <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Party Members Section -->
+    <section class="section">
+        <div class="container">
+            <div class="members-header">
+                <h2>สมาชิกพรรค</h2>
+                <div class="members-header-line"></div>
+            </div>
+            <div class="candidates-grid" id="candidatesGrid">
+                <!-- Candidate 2 -->
+                <div class="candidate-card" onclick="openCandidateModal(2)">
+                    <div class="candidate-img-wrapper">
+                        <img src="images/candidates/02_vice_1/1-IMG_0006.jpg" alt="200">
+                    </div>
+                    <div class="candidate-info">
+                        <span class="candidate-role">รองประธานนักเรียนคนที่ 1</span>
+                        <h3>นายณัธนนท์ วุ่นนา</h3>
+                        <p class="candidate-motto">""</p>
+                        <button class="btn-text">ดูประวัติ <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <!-- Candidate 3 -->
+                <div class="candidate-card" onclick="openCandidateModal(3)">
+                    <div class="candidate-img-wrapper">
+                        <img src="images/candidates/03_vice_2/1-IMG_0029.jpg" alt="200">
+                    </div>
+                    <div class="candidate-info">
+                        <span class="candidate-role">รองประธานนักเรียนคนที่ 2</span>
+                        <h3>นางสาววิลาสินี ปู่สุข</h3>
+                        <p class="candidate-motto">""</p>
+                        <button class="btn-text">ดูประวัติ <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <!-- Candidate 4 -->
+                <div class="candidate-card" onclick="openCandidateModal(4)">
+                    <div class="candidate-img-wrapper">
+                        <img src="images/candidates/04_secretary/3-IMG_7082.jpg" alt="200">
+                    </div>
+                    <div class="candidate-info">
+                        <span class="candidate-role">คณะกรรมการฝ่ายเลขานุการ</span>
+                        <h3>นายจักพันธ์ โพาคาประเสริฐ</h3>
+                        <p class="candidate-motto">""</p>
+                        <button class="btn-text">ดูประวัติ <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <!-- Candidate 5 -->
+                <div class="candidate-card" onclick="openCandidateModal(5)">
+                    <div class="candidate-img-wrapper">
+                        <img src="images/candidates/05_pr/1-IMG_5580.jpg" alt="200">
+                    </div>
+                    <div class="candidate-info">
+                        <span class="candidate-role">คณะกรรมการฝ่ายประชาสัมพันธ์</span>
+                        <h3>นางสาวปุญญานันท์ สำราญจิตร์</h3>
+                        <p class="candidate-motto">""</p>
+                        <button class="btn-text">ดูประวัติ <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <!-- Candidate 6 -->
+                <div class="candidate-card" onclick="openCandidateModal(6)">
+                    <div class="candidate-img-wrapper">
+                        <img src="images/candidates/06_treasurer/1-IMG_7023.jpg" alt=" 200">
+                    </div>
+                    <div class="candidate-info">
+                        <span class="candidate-role">คณะกรรมการฝ่ายเหรัญญิก</span>
+                        <h3>นายเฉลิมชนม์ คนชม</h3>
+                        <p class="candidate-motto">""</p>
+                        <button class="btn-text">ดูประวัติ <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <!-- Candidate 7 -->
+                <div class="candidate-card" onclick="openCandidateModal(7)">
+                    <div class="candidate-img-wrapper">
+                        <img src="images/candidates/07_discipline/1-IMG_9996.jpg" alt=" 200">
+                    </div>
+                    <div class="candidate-info">
+                        <span class="candidate-role">คณะกรรมการฝ่ายปกครอง</span>
+                        <h3>นายธนภัทร สุวรรณประดิษฐ์</h3>
+                        <p class="candidate-motto">""</p>
+                        <button class="btn-text">ดูประวัติ <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <!-- Candidate 8 -->
+                <div class="candidate-card" onclick="openCandidateModal(8)">
+                    <div class="candidate-img-wrapper">
+                        <img src="images/candidates/08_activities/1-IMG_7125.jpg" alt=" 200">
+                    </div>
+                    <div class="candidate-info">
+                        <span class="candidate-role">คณะกรรมการฝ่ายกิจกรรม</span>
+                        <h3>นายธนดล แสงอรุณ</h3>
+                        <p class="candidate-motto">""</p>
+                        <button class="btn-text">ดูประวัติ <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <!-- Candidate 9 -->
+                <div class="candidate-card" onclick="openCandidateModal(9)">
+                    <div class="candidate-img-wrapper">
+                        <img src="images/candidates/09_academic/1-IMG_5557.jpg" alt=" 200">
+                    </div>
+                    <div class="candidate-info">
+                        <span class="candidate-role">คณะกรรมการฝ่ายวิชาการ</span>
+                        <h3>นางสาวณัชชาพัชร์ พุทธขันธ์</h3>
+                        <p class="candidate-motto">""</p>
+                        <button class="btn-text">ดูประวัติ <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <!-- Candidate 10 -->
+                <div class="candidate-card" onclick="openCandidateModal(10)">
+                    <div class="candidate-img-wrapper">
+                        <img src="images/candidates/10_host/3-IMG_7058.jpg" alt="200">
+                    </div>
+                    <div class="candidate-info">
+                        <span class="candidate-role">คณะกรรมการฝ่ายปฏิคม</span>
+                        <h3>นายศุภกฤษ์ หอมขจร</h3>
+                        <p class="candidate-motto">""</p>
+                        <button class="btn-text">ดูประวัติ <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal Popup -->
+    <div id="candidateModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-body">
+                <div class="modal-img">
+                    <img id="modalImg" src="" alt="Candidate image" class="modal-img-beauty">
+                </div>
+                <div class="modal-details">
+                    <span class="modal-role" id="modalRole">Presient</span>
+                    <h2 id="modalName">Name Surname</h2>
+                    <p class="modal-quote" id="modalQuote">"Quote here"</p>
+                    <div class="modal-divider"></div>
+
+                    <div class="modal-section">
+                        <h4><i class="fa-solid fa-bullseye"></i> สิ่งที่อยาก "ลอง" เปลี่ยน</h4>
+                        <p id="modalChange">Description of what they want to change.</p>
+                    </div>
+
+                    <div class="modal-section">
+                        <h4><i class="fa-solid fa-id-card"></i> ประวัติพอสังเขป</h4>
+                        <p id="modalFloor"><br><br></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>Want To Try</h3>
+                    <p>กล้านำ ทำจริง <br>
+                        แล้วพวกเราจะมาช่วยกันพัฒนาโรงเรียนของพวกเราให้น่าอยู่มากยิ่งขึ้นไปพร้อมกันครับ💚💛🖤</p>
+                </div>
+                <div class="footer-links">
+                    <h4>เมนูลัด</h4>
+                    <ul>
+                        <li><a href="about.html">เกี่ยวกับเรา</a></li>
+                        <li><a href="policies.html">นโยบาย</a></li>
+                        <li><a href="candidates.html">ทีมงาน</a></li>
+                        <li><a href="ai-chat.html">AI Helper</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>ติดต่อเรา</h4>
+                    <ul>
+                        <li><a href="#"><i class="fa-brands fa-facebook"></i> Want To Try Party(ยังไม่พร้อม)</a></li>
+                        <li><a
+                                href="https://www.instagram.com/want.to.try.number1?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="><i
+                                    class="fa-brands fa-instagram"></i> WANT TO TRY</a></li>
+                        <li><a href="#"><i class="fa-brands fa-line"></i> @wanttotry(ยังไม่พร้อม)</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>สื่อหาเสียงอิเล็กทรอนิกส์นี้ผลิตโดยพรรคเด็กอยากลอง</p>
+                <p>&copy; 2026 Want To Try Party. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Action Button -->
+    <div class="fab-container" id="quickContactFab">
+        <div class="fab-menu">
+            <h4><i class="fa-solid fa-bolt"></i> ติดต่อด่วน</h4>
+            <p>มีคำถามหรือข้อสงสัย? พิมพ์คุยกับ AI หรือส่งข้อความหาเราได้ทันที</p>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <a href="ai-chat.html" class="btn btn-techno">
+                    <i class="fa-solid fa-robot"></i> คุยกับ AI
+                </a>
+                <a href="contact.html" class="btn btn-primary">
+                    <i class="fa-solid fa-paper-plane"></i> ส่งข้อความถึงเรา
+                </a>
+            </div>
+        </div>
+        <button class="fab-button">
+            <i class="fa-solid fa-message"></i>
+        </button>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Inline data for modal population (Or move to script.js)
+        const candidates = {
+            1: { name: "นางสาวฐิรณัชญ์ บุญนาวงษ์", role: "ประธานนักเรียน", img: "images/candidates/01_president/1-IMG_9981.jpg", quote: "กล้านำ ทำจริง เพื่อโรงเรียนของเรา", change: "มุ่งเน้นการมีส่วนร่วมของนักเรียนทุกคนในการพัฒนาโรงเรียน", floor: "นักเรียนชั้นมัธยมศึกษาปีที่ 4/..." },
+            2: { name: "นายณัธนนท์ วุ่นนา", role: "รองประธานนักเรียนคนที่ 1", img: "images/candidates/02_vice_1/1-IMG_0006.jpg", quote: "", change: "", floor: "นักเรียนชั้นมัธยมศึกษาปีที่ 4/..." },
+            3: { name: "นางสาววิลาสินี ปู่สุข", role: "รองประธานนักเรียนคนที่ 2", img: "images/candidates/03_vice_2/1-IMG_0029.jpg", quote: "", change: "", floor: "นักเรียนชั้นมัธยมศึกษาปีที่ 4/..." },
+            4: { name: "นายจักพันธ์ โพาคาประเสริฐ", role: "คณะกรรมการฝ่ายเลขานุการ", img: "images/candidates/04_secretary/3-IMG_7082.jpg", quote: "", change: "", floor: "นักเรียนชั้นมัธยมศึกษาปีที่ 4/..." },
+            5: { name: "นางสาวปุญญานันท์ สำราญจิตร์", role: "คณะกรรมการฝ่ายประชาสัมพันธ์", img: "images/candidates/05_pr/1-IMG_5580.jpg", quote: "", change: "", floor: "นักเรียนชั้นมัธยมศึกษาปีที่ 4/..." },
+            6: { name: "นายเฉลิมชนม์ คนชม", role: "คณะกรรมการฝ่ายเหรัญญิก", img: "images/candidates/06_treasurer/1-IMG_7023.jpg", quote: "", change: "", floor: "นักเรียนชั้นมัธยมศึกษาปีที่ 4/..." },
+            7: { name: "นายธนภัทร สุวรรณประดิษฐ์", role: "คณะกรรมการฝ่ายปกครอง", img: "images/candidates/07_discipline/1-IMG_9996.jpg", quote: "", change: "", floor: "นักเรียนชั้นมัธยมศึกษาปีที่ 4/..." },
+            8: { name: "นายธนดล แสงอรุณ", role: "คณะกรรมการฝ่ายกิจกรรม", img: "images/candidates/08_activities/1-IMG_7125.jpg", quote: "", change: "", floor: "นักเรียนชั้นมัธยมศึกษาปีที่ 4/..." },
+            9: { name: "นางสาวณัชชาพัชร์ พุทธขันธ์", role: "คณะกรรมการฝ่ายวิชาการ", img: "images/candidates/09_academic/1-IMG_5557.jpg", quote: "", change: "", floor: "นักเรียนชั้นมัธยมศึกษาปีที่ 4/..." },
+            10: { name: "นายศุภกฤษ์ หอมขจร", role: "คณะกรรมการฝ่ายปฏิคม", img: "images/candidates/10_host/3-IMG_7058.jpg", quote: "", change: "", floor: "นักเรียนชั้นมัธยมศึกษาปีที่ 4/..." },
+        };
+
+        function openCandidateModal(id) {
+            const modal = document.getElementById("candidateModal");
+            const data = candidates[id];
+
+            document.getElementById("modalName").innerText = data.name;
+            document.getElementById("modalRole").innerText = data.role;
+            document.getElementById("modalImg").src = data.img;
+            document.getElementById("modalQuote").innerText = '"' + data.quote + '"';
+            document.getElementById("modalChange").innerText = data.change;
+            document.getElementById("modalFloor").innerText = data.floor;
+
+            modal.style.display = "block";
+            document.body.style.overflow = "hidden"; // Prevent scrolling
+        }
+
+        document.querySelector(".close-modal").onclick = function () {
+            document.getElementById("candidateModal").style.display = "none";
+            document.body.style.overflow = "auto";
+        }
+
+        window.onclick = function (event) {
+            const modal = document.getElementById("candidateModal");
+            if (event.target == modal) {
+                modal.style.display = "none";
+                document.body.style.overflow = "auto";
+            }
+        }
+    </script>
+</body>
+
+</html>
