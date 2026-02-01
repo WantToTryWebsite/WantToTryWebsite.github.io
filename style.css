@@ -685,12 +685,62 @@ img {
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     .dev-badge {
+        display: none !important;
+    }
+
+    /* แสดง dev-badge-small แบบ inline อยู่ข้างหลังชื่อเมนู */
+    .dev-badge-small {
+        position: static !important;
+        transform: none !important;
+        display: inline-flex !important;
+        margin-left: 8px;
+        font-size: 0.5rem;
+        padding: 3px 6px;
+        animation: none;
+    }
+
+    .dev-badge-small::before {
         display: none;
     }
 
-    .dev-badge-small {
+    /* Nav Button Wrapper สำหรับ mobile menu */
+    .nav-btn-wrapper {
+        width: 100%;
+    }
+
+    .nav-btn-wrapper .nav-link,
+    .nav-btn-wrapper .btn-techno {
+        width: 100%;
+        justify-content: flex-start;
+        display: flex;
+        align-items: center;
+    }
+
+    /* AI Button Wrapper */
+    .ai-btn-wrapper {
+        width: 100%;
+    }
+
+    .ai-btn-wrapper .btn-techno {
+        width: 100%;
+        justify-content: flex-start;
+        display: flex;
+        align-items: center;
+    }
+
+    .ai-btn-wrapper .dev-badge {
+        position: static !important;
+        transform: none !important;
+        display: inline-flex !important;
+        margin-left: 8px;
+        font-size: 0.5rem;
+        padding: 3px 6px;
+        animation: none;
+    }
+
+    .ai-btn-wrapper .dev-badge::before {
         display: none;
     }
 }
