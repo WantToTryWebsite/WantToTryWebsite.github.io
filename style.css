@@ -475,12 +475,57 @@ img {
     margin: 0 2px;
 }
 
+/* Party Number Badge */
+.party-number {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    height: 28px;
+    border: 2px solid black;
+    /* Outer border ensures the look of a contiguous box */
+    border-radius: 4px;
+    /* Slight rounding for better look, or 0 for sharp */
+    overflow: hidden;
+    box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+}
+
+.p-num {
+    background-color: #ff69b4;
+    /* Hot pink/Magenta as seen in user image */
+    color: black;
+    font-weight: 800;
+    padding: 0 8px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    border-right: 2px solid black;
+}
+
+.p-mark {
+    background-color: white;
+    color: black;
+    padding: 0 6px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.p-mark i {
+    font-size: 1rem;
+    font-weight: 900;
+}
+
 /* Nav Menu Pill */
 /* Nav Menu Pill (Light Theme) */
 .nav-links {
     display: flex;
     align-items: center;
     gap: 4px;
+    margin-left: 100px;
+    /* Added spacing from logo/badge */
     background: rgba(255, 255, 255, 0.75);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
@@ -499,6 +544,8 @@ img {
     display: flex;
     align-items: center;
     gap: 4px;
+    margin-left: 100px;
+    /* Added spacing from logo/badge */
     background: rgba(20, 20, 20, 0.6);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
@@ -506,6 +553,8 @@ img {
     border-radius: 50px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    flex-wrap: nowrap;
+    white-space: nowrap;
 }
 
 .nav-linkss .nav-link {
@@ -785,6 +834,94 @@ img {
 
 .dev-badge-small i {
     font-size: 0.5rem;
+}
+
+/* Badge Tooltip Styles */
+/* Badge Tooltip Styles */
+.badge-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    text-decoration: none;
+    vertical-align: middle;
+}
+
+.badge-tooltip {
+    position: relative;
+    /* Static flow */
+    background: linear-gradient(135deg, #ff6b35, #f7931e);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 50px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    white-space: nowrap;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Arrow: Left side (pointing to text) by default */
+.badge-tooltip::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -5px;
+    transform: translateY(-50%);
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-right: 5px solid #ff6b35;
+}
+
+/* Variant: Wait */
+.badge-tooltip.wait {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.badge-tooltip.wait::before {
+    border-right-color: #ef4444;
+}
+
+/* Mobile Optimization: Align Right (Space Between) like Settings Menu */
+@media (max-width: 768px) {
+    .footer-links ul li {
+        display: block;
+        /* Ensure list item takes width */
+    }
+
+    .badge-link {
+        display: flex;
+        /* Change to flex container */
+        width: 100%;
+        /* Full width */
+        flex-direction: row;
+        /* Row layout */
+        align-items: center;
+        justify-content: space-between;
+        /* Push badge to right */
+        gap: 10px;
+        padding-right: 10px;
+        /* Safe padding */
+    }
+
+    .badge-tooltip {
+        font-size: 0.65rem;
+        padding: 4px 10px;
+        margin-left: auto;
+        /* Ensure it sticks to right if flex behavior varies */
+        position: static;
+        /* Remove relative/absolute positioning logic for simple flow */
+        transform: none;
+    }
+
+    /* Remove arrow on mobile for pill style */
+    .badge-tooltip::before {
+        display: none;
+    }
 }
 
 /* Hero Section */
@@ -3613,6 +3750,11 @@ body.dark-theme .footer-links ul li a:hover {
    COMPREHENSIVE MOBILE RESPONSIVE
    ==================================== */
 
+/* Mobile Menu Header - Hidden on Desktop */
+.mobile-menu-header {
+    display: none !important;
+}
+
 /* Mobile Navigation - Hamburger Menu */
 @media (max-width: 900px) {
     .navbar {
@@ -3623,57 +3765,192 @@ body.dark-theme .footer-links ul li a:hover {
         padding: 0 15px;
     }
 
+    /* Mobile Menu Header - Visible on Mobile */
+    .mobile-menu-header {
+        display: flex !important;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0 0 20px 0;
+        margin-bottom: 0px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .mobile-menu-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #333;
+        text-transform: uppercase;
+    }
+
+    .mobile-menu-logo img {
+        width: 35px;
+        height: 35px;
+    }
+
+    .mobile-menu-close {
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+        color: #333;
+        cursor: pointer;
+        border-radius: 50%;
+        transition: background 0.2s;
+    }
+
+    .mobile-menu-close:hover {
+        background: rgba(0, 0, 0, 0.05);
+        color: var(--color-primary-red);
+    }
+
+    /* Mobile Navigation Redesign - Refined Full Screen */
     .nav-links,
     .nav-linkss {
-        position: fixed;
-        top: 60px;
-        left: 0;
-        right: 0;
-        background: rgba(255, 255, 255, 0.98);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        background: white !important;
         flex-direction: column;
-        padding: 20px;
-        gap: 8px;
-        border-radius: 0;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-        max-height: calc(100vh - 60px);
+        padding: 30px 24px 40px !important;
+        /* Adjusted top padding for header */
+        margin: 0 !important;
+        gap: 0;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        max-height: none !important;
         overflow-y: auto;
-        transform: translateY(-120%);
+        overflow-x: hidden;
+        transform: translateY(-100%);
         opacity: 0;
-        transition: all 0.3s ease;
-        z-index: 999;
+        visibility: hidden;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        z-index: 9999 !important;
+        /* Highest priority */
+        display: flex;
+        box-sizing: border-box;
     }
 
     .nav-links.active,
     .nav-linkss.active {
         transform: translateY(0);
         opacity: 1;
+        visibility: visible;
     }
 
+    /* Override dark theme nav for mobile consistency */
     .nav-linkss {
-        background: rgba(20, 20, 30, 0.98);
+        background: white;
     }
 
+    .nav-linkss .nav-link,
+    .nav-linkss .nav-link i,
+    .nav-linkss .nav-text span {
+        color: #333 !important;
+    }
+
+    /* List Items */
     .nav-link {
         width: 100%;
-        padding: 14px 20px;
-        border-radius: 12px;
+        padding: 18px 0;
+        border-radius: 0;
         justify-content: flex-start;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        background: transparent !important;
+        box-sizing: border-box;
     }
 
-    .nav-link:hover {
-        background: rgba(230, 57, 70, 0.1);
+    .nav-link:last-child {
+        border-bottom: none;
+    }
+
+    /* Large Icons */
+    .nav-link i {
+        font-size: 1.5rem;
+        width: 40px;
+        /* Fixed width for alignment */
+        text-align: center;
+        color: #1a1a1a;
+        margin-right: 15px;
+        flex-shrink: 0;
+    }
+
+    .nav-text {
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: #333;
+        flex-grow: 1;
+        /* Allow text to take space */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Wrapper for items with badges */
+    .nav-btn-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        box-sizing: border-box;
+    }
+
+    .nav-btn-wrapper .nav-link {
+        border-bottom: none;
+        width: auto;
+        flex: 1;
+        padding: 18px 0;
+        min-width: 0;
+        /* Allow flex shrink */
+    }
+
+    /* Mobile Badges (Pill style on right) */
+    .dev-badge-small {
+        position: static;
+        transform: none;
+        animation: none;
+        margin-left: 10px;
+        background: linear-gradient(135deg, #ff9f43, #ff6b35);
+        padding: 6px 12px;
+        font-size: 0.75rem;
+        border-radius: 30px;
+        box-shadow: none;
+        flex-shrink: 0;
+        /* Prevent badge from shrinking */
+        white-space: nowrap;
     }
 
     .ai-btn-wrapper {
         width: 100%;
-        flex-direction: column;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        box-sizing: border-box;
     }
 
     .ai-btn-wrapper .btn-techno {
-        width: 100%;
+        width: auto;
+        flex: 1;
+        padding: 18px 0;
         justify-content: flex-start;
+        border-radius: 0;
+        min-width: 0;
+    }
+
+    .ai-btn-wrapper .dev-badge-small {
+        margin-left: 10px;
+        margin-top: 0;
     }
 
     .logo-text {
