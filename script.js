@@ -85,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Update immediately and then every second
     if (document.getElementById("countdown")) {
         updateCountdown();
+        setInterval(updateCountdown, 1000);
     }
 
     // Policy Search Logic
