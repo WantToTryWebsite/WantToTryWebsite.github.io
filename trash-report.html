@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รายงานจุดขยะ | Want To Try</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Trash Report Specific Styles */
+        .trash-report-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .map-section {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .map-section h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            color: var(--color-text-main);
+        }
+
+        .map-section h3 i {
+            color: var(--color-primary-red);
+        }
+
+        .school-map-container {
+            position: relative;
+            width: 100%;
+            border-radius: var(--border-radius-md);
+            overflow: hidden;
+            cursor: crosshair;
+            border: 3px solid var(--color-border);
+            transition: border-color 0.3s ease;
+        }
+
+        .school-map-container:hover {
+            border-color: var(--color-primary-red);
+        }
+
+        .school-map-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        .map-pin {
+            position: absolute;
+            transform: translate(-50%, -100%);
+            font-size: 2.5rem;
+            color: var(--color-primary-red);
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+            animation: pinDrop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        @keyframes pinDrop {
+            0% {
+                transform: translate(-50%, -200%);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translate(-50%, -100%);
+                opacity: 1;
+            }
+        }
+
+        .map-hint {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+            padding: 12px 16px;
+            background: linear-gradient(135deg, rgba(69, 123, 157, 0.1), rgba(230, 57, 70, 0.1));
+            border-radius: var(--border-radius-sm);
+            color: var(--color-text-muted);
+            font-size: 0.9rem;
+        }
+
+        .map-hint i {
+            color: var(--color-primary-blue);
+        }
+
+        .map-hint.selected {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(34, 197, 94, 0.05));
+            color: #16a34a;
+        }
+
+        .map-hint.selected i {
+            color: #16a34a;
+        }
+
+        /* Location Zones - Clickable areas on map */
+        .location-zone {
+            position: absolute;
+            cursor: pointer;
+            background: rgba(69, 123, 157, 0.1);
+            border: 2px dashed transparent;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            opacity: 0;
+        }
+
+        .school-map-container:hover .location-zone {
+            opacity: 1;
+        }
+
+        .location-zone:hover {
+            background: rgba(230, 57, 70, 0.2);
+            border-color: var(--color-primary-red);
+        }
+
+        .location-zone.selected {
+            background: rgba(34, 197, 94, 0.2);
+            border-color: #16a34a;
+            opacity: 1;
+        }
+
+        /* Form Section */
+        .form-section {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .form-section h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            color: var(--color-text-main);
+        }
+
+        .form-section h3 i {
+            color: var(--color-primary-red);
+        }
+
+        .selected-location {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.05));
+            border-radius: var(--border-radius-sm);
+            margin-bottom: 20px;
+            border-left: 4px solid #16a34a;
+        }
+
+        .selected-location i {
+            font-size: 1.5rem;
+            color: #16a34a;
+        }
+
+        .selected-location-text {
+            flex: 1;
+        }
+
+        .selected-location-text small {
+            color: var(--color-text-muted);
+            display: block;
+        }
+
+        .selected-location-text strong {
+            color: var(--color-text-main);
+            font-size: 1.1rem;
+        }
+
+        .no-location {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: rgba(230, 57, 70, 0.08);
+            border-radius: var(--border-radius-sm);
+            margin-bottom: 20px;
+            border-left: 4px solid var(--color-primary-red);
+            color: var(--color-primary-red);
+        }
+
+        /* Severity Selector */
+        .severity-selector {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .severity-option {
+            flex: 1;
+            text-align: center;
+            padding: 16px 12px;
+            border: 2px solid var(--color-border);
+            border-radius: var(--border-radius-md);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .severity-option:hover {
+            border-color: var(--color-primary-blue);
+            transform: translateY(-2px);
+        }
+
+        .severity-option.selected {
+            border-color: var(--color-primary-red);
+            background: linear-gradient(135deg, rgba(230, 57, 70, 0.1), rgba(230, 57, 70, 0.05));
+        }
+
+        .severity-option i {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .severity-option.low i {
+            color: #22c55e;
+        }
+
+        .severity-option.medium i {
+            color: #f59e0b;
+        }
+
+        .severity-option.high i {
+            color: #ef4444;
+        }
+
+        .severity-option small {
+            display: block;
+            color: var(--color-text-muted);
+            font-size: 0.8rem;
+        }
+
+        /* Image Upload */
+        .image-upload-area {
+            border: 2px dashed var(--color-border);
+            border-radius: var(--border-radius-md);
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .image-upload-area:hover {
+            border-color: var(--color-primary-blue);
+            background: rgba(69, 123, 157, 0.05);
+        }
+
+        .image-upload-area i {
+            font-size: 2.5rem;
+            color: var(--color-text-muted);
+            margin-bottom: 12px;
+        }
+
+        .image-upload-area p {
+            color: var(--color-text-muted);
+            margin-bottom: 8px;
+        }
+
+        .image-upload-area small {
+            color: var(--color-text-light);
+        }
+
+        .image-preview {
+            display: none;
+            margin-top: 16px;
+        }
+
+        .image-preview img {
+            max-width: 200px;
+            max-height: 150px;
+            border-radius: var(--border-radius-sm);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .image-preview.show {
+            display: block;
+        }
+
+        /* Success Animation */
+        .success-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .success-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .success-content {
+            background: white;
+            padding: 40px 60px;
+            border-radius: var(--border-radius-lg);
+            text-align: center;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+
+        .success-overlay.show .success-content {
+            transform: scale(1);
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 20px;
+        }
+
+        .success-icon i {
+            font-size: 2.5rem;
+            color: white;
+        }
+
+        .success-content h2 {
+            color: var(--color-text-main);
+            margin-bottom: 10px;
+        }
+
+        .success-content p {
+            color: var(--color-text-muted);
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .severity-selector {
+                flex-direction: column;
+            }
+
+            .severity-option {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                text-align: left;
+                padding: 14px 16px;
+            }
+
+            .severity-option i {
+                margin-bottom: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="images/Logo.png" alt="logo" width="40" height="40">
+                <div class="logo-text">
+                    <div class="logo-row">Want To Try<span class="sep">|</span> <span class="black">เด็กอยากลอง</span>
+                        <div class="party-number">
+                            <div class="p-num">1</div>
+                            <div class="p-mark"><i class="fa-solid fa-xmark"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Hamburger Menu Button -->
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <div class="nav-links">
+                <div class="mobile-menu-header">
+                    <div class="mobile-menu-logo">
+                        <img src="images/Logo.png" alt="logo">
+                        Want To Try
+                    </div>
+                    <div class="mobile-menu-close" onclick="toggleMenu()">
+                        <i class="fa-solid fa-xmark"></i>
+                    </div>
+                </div>
+
+                <a href="index.html" class="nav-link">
+                    <i class="fa-solid fa-house"></i>
+                    <div class="nav-text"><span>หน้าแรก</span></div>
+                </a>
+                <a href="about.html" class="nav-link">
+                    <i class="fa-solid fa-users"></i>
+                    <div class="nav-text"><span>รู้จักพรรค</span></div>
+                </a>
+                <a href="candidates.html" class="nav-link">
+                    <i class="fa-solid fa-user-tie"></i>
+                    <div class="nav-text"><span>สมาชิก</span></div>
+                </a>
+                <a href="policies.html" class="nav-link">
+                    <i class="fa-solid fa-book-open"></i>
+                    <div class="nav-text"><span>นโยบายพรรค</span></div>
+                </a>
+                <div class="nav-btn-wrapper">
+                    <a href="trash-report.html" class="nav-link active">
+                        <i class="fa-solid fa-trash-can"></i>
+                        <div class="nav-text"><span>รายงานจุดขยะ</span></div>
+                    </a>
+                    <div class="dev-badge-small">
+                        <i class="fa-solid fa-wrench"></i> กำลังพัฒนา
+                    </div>
+                </div>
+                <div class="nav-btn-wrapper">
+                    <a href="ai-chat.html" class="btn btn-techno nav-link">
+                        <i class="fa-solid fa-robot"></i>
+                        <div class="nav-text"><span>คุยกับ AI</span></div>
+                    </a>
+                    <div class="dev-badge-small">
+                        <i class="fa-solid fa-wrench"></i> กำลังพัฒนา
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <h1 class="page-title"><i class="fa-solid fa-trash-can"></i> รายงานจุดขยะ</h1>
+            <p class="page-subtitle">คลิกบนแผนที่เพื่อระบุตำแหน่งที่มีขยะสะสม แล้วส่งรายงานให้สภานักเรียนดำเนินการ</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <section class="section bg-light">
+        <div class="container trash-report-container">
+
+            <!-- Map Section -->
+            <div class="map-section">
+                <h3><i class="fa-solid fa-map-location-dot"></i> เลือกตำแหน่งบนแผนที่</h3>
+
+                <div class="school-map-container" id="schoolMap">
+                    <img src="images/school-map.png" alt="แผนผังโรงเรียน" id="mapImage">
+
+                    <!-- Dynamic Pin Marker -->
+                    <div class="map-pin" id="mapPin" style="display: none;">
+                        <i class="fa-solid fa-location-dot"></i>
+                    </div>
+                </div>
+
+                <div class="map-hint" id="mapHint">
+                    <i class="fa-solid fa-hand-pointer"></i>
+                    <span>คลิกบนแผนที่เพื่อระบุตำแหน่งที่ต้องการรายงาน</span>
+                </div>
+            </div>
+
+            <!-- Form Section -->
+            <div class="form-section">
+                <h3><i class="fa-solid fa-clipboard-list"></i> รายละเอียดการรายงาน</h3>
+
+                <form id="trashReportForm">
+                    <!-- Selected Location Display -->
+                    <div id="noLocationWarning" class="no-location">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <span>กรุณาคลิกเลือกตำแหน่งบนแผนที่ก่อน</span>
+                    </div>
+
+                    <div id="selectedLocationDisplay" class="selected-location" style="display: none;">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <div class="selected-location-text">
+                            <small>ตำแหน่งที่เลือก</small>
+                            <strong id="locationName">-</strong>
+                        </div>
+                        <button type="button" class="btn btn-secondary" onclick="clearLocation()"
+                            style="padding: 8px 16px; font-size: 0.85rem;">
+                            <i class="fa-solid fa-rotate-left"></i> เปลี่ยน
+                        </button>
+                    </div>
+
+                    <!-- Hidden fields for coordinates -->
+                    <input type="hidden" id="coordX" name="coordX">
+                    <input type="hidden" id="coordY" name="coordY">
+                    <input type="hidden" id="locationCode" name="locationCode">
+
+                    <!-- Location Detail -->
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-door-open"></i> รายละเอียดเพิ่มเติม (ชั้น/ห้อง/จุดเฉพาะ)</label>
+                        <input type="text" class="form-control" id="locationDetail" name="locationDetail"
+                            placeholder="เช่น ชั้น 2 หน้าห้อง ม.6/1, บริเวณบันได">
+                    </div>
+
+                    <!-- Severity -->
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-gauge-high"></i> ระดับความรุนแรง</label>
+                        <div class="severity-selector">
+                            <div class="severity-option low" data-value="low" onclick="selectSeverity('low')">
+                                <i class="fa-solid fa-leaf"></i>
+                                <div>
+                                    <strong>น้อย</strong>
+                                    <small>ขยะเล็กน้อย</small>
+                                </div>
+                            </div>
+                            <div class="severity-option medium selected" data-value="medium"
+                                onclick="selectSeverity('medium')">
+                                <i class="fa-solid fa-trash"></i>
+                                <div>
+                                    <strong>ปานกลาง</strong>
+                                    <small>ขยะสะสมหลายชิ้น</small>
+                                </div>
+                            </div>
+                            <div class="severity-option high" data-value="high" onclick="selectSeverity('high')">
+                                <i class="fa-solid fa-dumpster-fire"></i>
+                                <div>
+                                    <strong>มาก</strong>
+                                    <small>ขยะล้น/ส่งกลิ่น</small>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="severity" name="severity" value="medium">
+                    </div>
+
+                    <!-- Description -->
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-comment-dots"></i> คำอธิบายเพิ่มเติม (ถ้ามี)</label>
+                        <textarea class="form-control" id="description" name="description" rows="3"
+                            placeholder="เช่น ขยะถุงพลาสติกจากร้านค้า, กระดาษเยอะ, ขยะเปียก..."></textarea>
+                    </div>
+
+                    <!-- Image Upload -->
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-camera"></i> แนบรูปภาพ (ไม่บังคับ)</label>
+                        <div class="image-upload-area" onclick="document.getElementById('imageInput').click()">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <p>คลิกเพื่อเลือกรูปภาพ</p>
+                            <small>รองรับ JPG, PNG (ไม่เกิน 5MB)</small>
+                        </div>
+                        <input type="file" id="imageInput" name="image" accept="image/*" style="display: none;"
+                            onchange="previewImage(this)">
+                        <div class="image-preview" id="imagePreview">
+                            <img id="previewImg" src="" alt="Preview">
+                            <button type="button" class="btn btn-secondary" onclick="removeImage()"
+                                style="margin-top: 10px; padding: 8px 16px; font-size: 0.85rem;">
+                                <i class="fa-solid fa-times"></i> ลบรูป
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="text-center" style="margin-top: 30px;">
+                        <button type="submit" class="btn btn-primary" id="submitBtn"
+                            style="min-width: 200px; padding: 14px 32px;">
+                            <i class="fa-solid fa-paper-plane"></i> ส่งรายงาน
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Success Overlay -->
+    <div class="success-overlay" id="successOverlay">
+        <div class="success-content">
+            <div class="success-icon">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <h2>ส่งรายงานสำเร็จ!</h2>
+            <p>ขอบคุณที่ช่วยรักษาความสะอาดของโรงเรียน<br>สภานักเรียนจะดำเนินการโดยเร็ว</p>
+            <a href="trash-report.html" class="btn btn-primary">
+                <i class="fa-solid fa-plus"></i> รายงานเพิ่มเติม
+            </a>
+            <a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">
+                <i class="fa-solid fa-house"></i> กลับหน้าหลัก
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>Want To Try</h3>
+                    <p>กล้านำ ทำจริง <br>
+                        แล้วพวกเราจะมาช่วยกันพัฒนาโรงเรียนของพวกเราให้น่าอยู่มากยิ่งขึ้นไปพร้อมกันครับ💚💛🖤</p>
+                </div>
+                <div class="footer-links">
+                    <h4>เมนูลัด</h4>
+                    <ul>
+                        <li><a href="about.html">รู้จักพรรค</a></li>
+                        <li><a href="policies.html">นโยบาย</a></li>
+                        <li><a href="candidates.html">สมาชิก</a></li>
+                        <li><a href="trash-report.html">รายงานจุดขยะ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>ติดต่อเรา</h4>
+                    <ul>
+                        <li><a
+                                href="https://www.instagram.com/want.to.try.number1?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="><i
+                                    class="fa-brands fa-instagram"></i> WANT TO TRY</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>สื่อหาเสียงอิเล็กทรอนิกส์นี้ผลิตโดยพรรคเด็กอยากลอง</p>
+                <p>&copy; 2026 Want To Try Party. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // ===== Map Click Handler =====
+        const schoolMap = document.getElementById('schoolMap');
+        const mapPin = document.getElementById('mapPin');
+        const mapHint = document.getElementById('mapHint');
+        const noLocationWarning = document.getElementById('noLocationWarning');
+        const selectedLocationDisplay = document.getElementById('selectedLocationDisplay');
+        const locationNameEl = document.getElementById('locationName');
+
+        // Location zones on the map (approximate percentages)
+        const locationZones = [
+            { name: 'อาคาร 1', x1: 13, y1: 62, x2: 38, y2: 70 },
+            { name: 'อาคาร 2', x1: 45, y1: 62, x2: 72, y2: 70 },
+            { name: 'อาคาร 3', x1: 81, y1: 50, x2: 88, y2: 80 },
+            { name: 'อาคาร 4', x1: 21, y1: 35, x2: 61, y2: 42 },
+            { name: 'อาคาร 5', x1: 21, y1: 52, x2: 72, y2: 60 },
+            { name: 'อาคาร 12', x1: 2, y1: 18, x2: 10, y2: 75 },
+            { name: 'อาคาร 13', x1: 13, y1: 18, x2: 38, y2: 26 },
+            { name: 'อาคาร 14', x1: 48, y1: 18, x2: 72, y2: 26 },
+            { name: 'โรงอาหาร', x1: 2, y1: 77, x2: 15, y2: 85 },
+            { name: 'หอประชุม', x1: 15, y1: 77, x2: 28, y2: 85 },
+            { name: 'โดมอเนกประสงค์', x1: 18, y1: 79, x2: 52, y2: 89 },
+            { name: 'สนามตะกร้อ', x1: 13, y1: 27, x2: 38, y2: 33 },
+            { name: 'สนามวอลเลย์บอล', x1: 38, y1: 27, x2: 72, y2: 33 },
+            { name: 'สนาม (ประตูหลัก)', x1: 82, y1: 5, x2: 95, y2: 20 },
+            { name: 'สนามบาส', x1: 85, y1: 35, x2: 95, y2: 48 },
+            { name: 'คลองเจดีย์บูชา', x1: 0, y1: 47, x2: 80, y2: 52 },
+        ];
+
+        let selectedLocation = null;
+
+        schoolMap.addEventListener('click', function (e) {
+            const rect = this.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+            // Find which zone was clicked
+            let zoneName = 'พื้นที่อื่น ๆ';
+            for (const zone of locationZones) {
+                if (x >= zone.x1 && x <= zone.x2 && y >= zone.y1 && y <= zone.y2) {
+                    zoneName = zone.name;
+                    break;
+                }
+            }
+
+            // Update pin position
+            mapPin.style.left = `${x}%`;
+            mapPin.style.top = `${y}%`;
+            mapPin.style.display = 'block';
+            mapPin.style.animation = 'none';
+            mapPin.offsetHeight; // Trigger reflow
+            mapPin.style.animation = 'pinDrop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+
+            // Update form fields
+            document.getElementById('coordX').value = x.toFixed(2);
+            document.getElementById('coordY').value = y.toFixed(2);
+            document.getElementById('locationCode').value = zoneName;
+
+            // Update UI
+            selectedLocation = zoneName;
+            locationNameEl.textContent = zoneName;
+            noLocationWarning.style.display = 'none';
+            selectedLocationDisplay.style.display = 'flex';
+
+            // Update hint
+            mapHint.className = 'map-hint selected';
+            mapHint.innerHTML = '<i class="fa-solid fa-check-circle"></i> <span>เลือกแล้ว: <strong>' + zoneName + '</strong></span>';
+        });
+
+        function clearLocation() {
+            mapPin.style.display = 'none';
+            selectedLocation = null;
+            document.getElementById('coordX').value = '';
+            document.getElementById('coordY').value = '';
+            document.getElementById('locationCode').value = '';
+            noLocationWarning.style.display = 'flex';
+            selectedLocationDisplay.style.display = 'none';
+            mapHint.className = 'map-hint';
+            mapHint.innerHTML = '<i class="fa-solid fa-hand-pointer"></i> <span>คลิกบนแผนที่เพื่อระบุตำแหน่งที่ต้องการรายงาน</span>';
+        }
+
+        // ===== Severity Selector =====
+        function selectSeverity(value) {
+            document.querySelectorAll('.severity-option').forEach(opt => opt.classList.remove('selected'));
+            document.querySelector(`.severity-option.${value}`).classList.add('selected');
+            document.getElementById('severity').value = value;
+        }
+
+        // ===== Image Preview =====
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('previewImg').src = e.target.result;
+                    document.getElementById('imagePreview').classList.add('show');
+                    document.querySelector('.image-upload-area').style.display = 'none';
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function removeImage() {
+            document.getElementById('imageInput').value = '';
+            document.getElementById('imagePreview').classList.remove('show');
+            document.querySelector('.image-upload-area').style.display = 'block';
+        }
+
+        // ===== Form Submit =====
+        document.getElementById('trashReportForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            if (!selectedLocation) {
+                alert('กรุณาคลิกเลือกตำแหน่งบนแผนที่ก่อนส่งรายงาน');
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> กำลังส่ง...';
+
+            // Collect form data
+            const formData = {
+                timestamp: new Date().toISOString(),
+                location: document.getElementById('locationCode').value,
+                locationDetail: document.getElementById('locationDetail').value,
+                coordX: document.getElementById('coordX').value,
+                coordY: document.getElementById('coordY').value,
+                severity: document.getElementById('severity').value,
+                description: document.getElementById('description').value,
+                status: 'pending'
+            };
+
+            // TODO: Send to Google Apps Script
+            // const scriptURL = 'YOUR_APPS_SCRIPT_URL';
+            // try {
+            //     await fetch(scriptURL, {
+            //         method: 'POST',
+            //         body: JSON.stringify(formData)
+            //     });
+            // } catch (error) {
+            //     console.error('Error:', error);
+            // }
+
+            // Simulate sending
+            setTimeout(() => {
+                document.getElementById('successOverlay').classList.add('show');
+            }, 1500);
+        });
+    </script>
+</body>
+
+</html>

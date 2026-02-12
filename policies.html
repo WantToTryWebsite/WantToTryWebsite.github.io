@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Policies | Want To Try</title>
+    <title>นโยบายพรรค | Want To Try</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,213 +17,566 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-
-    <!-- Password Lock Overlay -->
-    <div id="passwordOverlay" class="password-overlay">
-        <div class="password-box">
-            <div class="password-icon">
-                <i class="fa-solid fa-lock"></i>
-            </div>
-            <h2>หน้านี้ถูกล็อก</h2>
-            <p>กรุณาใส่รหัสผ่านเพื่อเข้าดูนโยบาย</p>
-            <div class="password-input-group">
-                <input type="password" id="passwordInput" class="password-input" placeholder="ใส่รหัสผ่าน..."
-                    onkeypress="if(event.key === 'Enter') checkPassword()">
-                <button onclick="checkPassword()" class="password-btn">
-                    <i class="fa-solid fa-arrow-right"></i>
-                </button>
-            </div>
-            <p id="passwordError" class="password-error" style="display: none;">
-                <i class="fa-solid fa-circle-exclamation"></i> รหัสผ่านไม่ถูกต้อง
-            </p>
-            <a href="index.html" class="password-back">
-                <i class="fa-solid fa-arrow-left"></i> กลับหน้าแรก
-            </a>
-        </div>
-    </div>
 
     <style>
-        .password-overlay {
-            position: fixed;
+        /* ========================================
+           POLICIES PAGE - PREMIUM DESIGN
+           ======================================== */
+
+        /* Hero Section - Matching site style */
+        .policies-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, var(--color-primary-red) 100%);
+            padding: 120px 0 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .policies-hero::before {
+            content: '';
+            position: absolute;
             top: 0;
             left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.3;
+        }
+
+        .policies-hero .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 8px 20px;
+            border-radius: 50px;
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 24px;
+        }
+
+        .policies-hero h1 {
+            font-size: clamp(2.5rem, 6vw, 3.5rem);
+            font-weight: 800;
+            color: white;
+            margin-bottom: 16px;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .policies-hero p {
+            font-size: 1.15rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Policy Cards Section */
+        .policies-section {
+            background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 50%, #f8fafc 100%);
+            padding: 70px 0 100px;
+        }
+
+        .policies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 32px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ========================================
+           ULTRA PREMIUM POLICY CARD
+           ======================================== */
+        .policy-card {
+            background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: 28px;
+            overflow: visible;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            border: 2px solid transparent;
+            box-shadow:
+                0 10px 40px rgba(0, 0, 0, 0.08),
+                0 4px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Animated Rainbow Border on Hover */
+        .policy-card::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: linear-gradient(60deg,
+                    #f79533, #f37055, #ef4e7b, #a166ab,
+                    #5073b8, #1098ad, #07b39b, #6fba82);
+            background-size: 300% 300%;
+            border-radius: 30px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            animation: borderGlow 3s ease infinite;
+        }
+
+        @keyframes borderGlow {
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .policy-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Inner card wrapper for overflow:hidden */
+        .policy-card-inner {
+            background: linear-gradient(145deg, #ffffff 0%, #fafbfc 100%);
+            border-radius: 26px;
+            overflow: hidden;
+        }
+
+        .policy-card:hover {
+            transform: translateY(-16px) scale(1.02);
+            box-shadow:
+                0 30px 60px rgba(0, 0, 0, 0.12),
+                0 15px 30px rgba(230, 57, 70, 0.08);
+        }
+
+        /* Image Section */
+        .policy-card-image-wrapper {
+            position: relative;
+            overflow: hidden;
+            height: 220px;
+        }
+
+        /* Shimmer overlay on image */
+        .policy-card-image-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            right: 0;
+            bottom: 0;
+            width: 200%;
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.2),
+                    transparent);
+            z-index: 1;
+            transform: skewX(-25deg);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .policy-card:hover .policy-card-image-wrapper::before {
+            opacity: 1;
+            animation: shimmer 0.8s ease;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-150%) skewX(-25deg);
+            }
+
+            100% {
+                transform: translateX(150%) skewX(-25deg);
+            }
+        }
+
+        .policy-card-image {
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), filter 0.4s;
+        }
+
+        .policy-card:hover .policy-card-image {
+            transform: scale(1.15);
+            filter: brightness(1.05);
+        }
+
+        /* 3D Number Badge */
+        .policy-card-number {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(145deg, #ff6b6b, var(--color-primary-red));
+            color: white;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 9999;
+            font-size: 1.4rem;
+            font-weight: 800;
+            box-shadow:
+                0 8px 25px rgba(230, 57, 70, 0.5),
+                inset 0 2px 0 rgba(255, 255, 255, 0.3),
+                inset 0 -2px 0 rgba(0, 0, 0, 0.1);
+            z-index: 3;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .password-overlay.hidden {
-            display: none;
+        .policy-card:hover .policy-card-number {
+            transform: rotate(-10deg) scale(1.15);
+            box-shadow: 0 12px 35px rgba(230, 57, 70, 0.6);
         }
 
-        .password-box {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            padding: 50px 40px;
-            border-radius: 24px;
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
-            animation: slideUp 0.5s ease;
+        /* Glassmorphism Category Badge */
+        .policy-card-category {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 10px 18px;
+            border-radius: 30px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--color-primary-blue);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            z-index: 3;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            transition: all 0.4s ease;
         }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .policy-card:hover .policy-card-category {
+            background: var(--color-primary-blue);
+            color: white;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(69, 123, 157, 0.4);
         }
 
-        .password-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #E63946, #d62839);
-            border-radius: 50%;
+        /* Content Section */
+        .policy-card-content {
+            padding: 28px 26px 24px;
+            position: relative;
+        }
+
+        /* Gradient Text Title */
+        .policy-card-title {
+            font-size: 1.35rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            line-height: 1.4;
+            background: linear-gradient(135deg, #1e3a5f 0%, var(--color-primary-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .policy-card-summary {
+            font-size: 0.92rem;
+            color: var(--color-text-muted);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .policy-card-footer {
             display: flex;
             align-items: center;
-            justify-content: center;
-            margin: 0 auto 24px;
-            box-shadow: 0 10px 30px rgba(230, 57, 70, 0.3);
+            justify-content: space-between;
+            padding-top: 16px;
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
         }
 
-        .password-icon i {
-            font-size: 2rem;
+        /* Animated CTA Button */
+        .policy-card-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--color-primary-red);
+            font-weight: 700;
+            font-size: 0.88rem;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, rgba(230, 57, 70, 0.08), rgba(230, 57, 70, 0.03));
+            border-radius: 14px;
+            transition: all 0.4s ease;
+        }
+
+        .policy-card:hover .policy-card-cta {
+            background: linear-gradient(135deg, var(--color-primary-red), #d63031);
             color: white;
+            padding: 12px 24px;
+            box-shadow: 0 8px 25px rgba(230, 57, 70, 0.35);
         }
 
-        .password-box h2 {
-            margin: 0 0 10px;
-            font-size: 1.5rem;
-            color: #1a1a2e;
+        .policy-card-cta i {
+            transition: transform 0.3s ease;
         }
 
-        .password-box>p {
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 0.95rem;
+        .policy-card:hover .policy-card-cta i {
+            animation: arrowPulse 0.6s ease infinite;
         }
 
-        .password-input-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .password-input {
-            flex: 1;
-            padding: 14px 20px;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-family: inherit;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-
-        .password-input:focus {
-            border-color: #E63946;
-            box-shadow: 0 0 0 4px rgba(230, 57, 70, 0.1);
-        }
-
-        .password-btn {
-            padding: 14px 20px;
-            background: linear-gradient(135deg, #E63946, #d62839);
-            border: none;
-            border-radius: 12px;
-            color: white;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .password-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 20px rgba(230, 57, 70, 0.4);
-        }
-
-        .password-error {
-            color: #E63946;
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-            animation: shake 0.5s ease;
-        }
-
-        @keyframes shake {
+        @keyframes arrowPulse {
 
             0%,
             100% {
                 transform: translateX(0);
             }
 
-            20%,
-            60% {
-                transform: translateX(-5px);
-            }
-
-            40%,
-            80% {
+            50% {
                 transform: translateX(5px);
             }
         }
 
-        .password-back {
-            color: #888;
-            text-decoration: none;
-            font-size: 0.9rem;
-            display: inline-flex;
+        /* ========================================
+           MODAL - PREMIUM DESIGN
+           ======================================== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            display: none;
             align-items: center;
-            gap: 8px;
-            transition: color 0.3s ease;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
-        .password-back:hover {
-            color: #E63946;
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
         }
-    </style>
 
-    <script>
-        // ไม่ต้องเช็ค session - ให้โชว์ password overlay ทุกครั้ง
-        // (ล้าง session เมื่อออกจากหน้า)
+        .modal-content {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            max-width: 720px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            transform: translateY(30px) scale(0.95);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-        function checkPassword() {
-            const input = document.getElementById('passwordInput');
-            const error = document.getElementById('passwordError');
-            const overlay = document.getElementById('passwordOverlay');
+        .modal-overlay.active .modal-content {
+            transform: translateY(0) scale(1);
+        }
 
-            // รหัสผ่าน: wtt2026 (Want To Try 2026)
-            if (input.value === 'wtt2026') {
-                overlay.style.animation = 'fadeOut 0.5s ease forwards';
-                setTimeout(() => {
-                    overlay.classList.add('hidden');
-                }, 500);
-            } else {
-                error.style.display = 'block';
-                input.style.borderColor = '#E63946';
-                input.value = '';
-                input.focus();
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--color-text-main);
+            z-index: 10;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-close:hover {
+            background: var(--color-primary-red);
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        .modal-image-wrapper {
+            position: relative;
+            height: 280px;
+            overflow: hidden;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal-gradient {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(to top, white, transparent);
+        }
+
+        .modal-body {
+            padding: 32px;
+            margin-top: -40px;
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .modal-number {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--color-primary-red), #D62828);
+            color: white;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            box-shadow: 0 8px 25px rgba(230, 57, 70, 0.35);
+            flex-shrink: 0;
+        }
+
+        .modal-title-group {
+            flex: 1;
+        }
+
+        .modal-category {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(69, 123, 157, 0.1), rgba(69, 123, 157, 0.2));
+            color: var(--color-primary-blue);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .modal-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--color-text-main);
+            line-height: 1.3;
+        }
+
+        .modal-description {
+            font-size: 1.05rem;
+            color: var(--color-text-muted);
+            line-height: 1.8;
+            margin-bottom: 28px;
+        }
+
+        .modal-features {
+            background: linear-gradient(135deg, var(--color-bg-light), #f0f4f8);
+            border-radius: var(--border-radius-md);
+            padding: 24px;
+            border-left: 4px solid var(--color-school-green);
+        }
+
+        .modal-features-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .modal-features-header i {
+            width: 32px;
+            height: 32px;
+            background: var(--color-school-green);
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-features-header h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-text-main);
+        }
+
+        .modal-features ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 12px;
+        }
+
+        .modal-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 0.95rem;
+            color: var(--color-text-main);
+            padding: 8px 0;
+        }
+
+        .modal-features li i {
+            color: var(--color-school-green);
+            margin-top: 4px;
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .policies-hero {
+                padding: 100px 0 60px;
+            }
+
+            .policies-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 0 16px;
+            }
+
+            .policy-card-image-wrapper {
+                height: 180px;
+            }
+
+            .modal-image-wrapper {
+                height: 200px;
+            }
+
+            .modal-body {
+                padding: 24px;
+            }
+
+            .modal-title {
+                font-size: 1.4rem;
+            }
+
+            .modal-header {
+                flex-direction: column;
+                gap: 12px;
             }
         }
+    </style>
+</head>
 
-        // Focus on password input when page loads
-        window.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('passwordInput').focus();
-        });
-    </script>
-
-
+<body>
 
     <!-- Navbar -->
     <nav class="navbar">
@@ -260,7 +613,7 @@
                     <i class="fa-solid fa-user-tie"></i>
                     <div class="nav-text"><span>สมาชิก</span></div>
                 </a>
-                <a href="policies.html" class="nav-link">
+                <a href="policies.html" class="nav-link active">
                     <i class="fa-solid fa-book-open"></i>
                     <div class="nav-text"><span>นโยบายพรรค</span></div>
                 </a>
@@ -282,7 +635,6 @@
                         <i class="fa-solid fa-wrench"></i> กำลังพัฒนา
                     </div>
                 </div>
-
                 <div class="nav-btn-wrapper">
                     <a href="ai-chat.html" class="btn btn-techno nav-link">
                         <i class="fa-solid fa-robot"></i>
@@ -296,208 +648,212 @@
         </div>
     </nav>
 
-    <!-- Page Header -->
-    <header class="page-header white">
+    <!-- Hero Section -->
+    <section class="policies-hero">
         <div class="container">
-            <h1 class="page-title">นโยบายของพวกเรา</h1>
-            <p class="page-subtitle">ทำจริง ไม่ขายฝัน อ่านแล้ว "อยากลอง" เลือก</p>
-        </div>
-    </header>
-
-    <!-- Search Section -->
-    <section class="search-section">
-        <div class="container">
-            <div class="search-container">
-                <div class="search-wrapper">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="policySearch" class="search-input" placeholder="ค้นหานโยบายที่คุณสนใจ...">
-                </div>
-                <button id="clearSearch" class="btn-clear">ล้างค่า</button>
+            <div class="hero-badge">
+                <i class="fa-solid fa-scroll"></i>
+                9 นโยบายเปลี่ยนโรงเรียน
             </div>
+            <h1>นโยบายของพวกเรา</h1>
+            <p>กดที่การ์ดเพื่อดูรายละเอียดแต่ละนโยบาย</p>
         </div>
     </section>
 
-    <!-- Policy Pillars (Premium Square Grid) -->
-    <section class="section" style="padding-top: 0;">
-        <div class="container">
-            <div class="pillars-grid">
-                <div class="pillar-card teal" onclick="scrollToPolicy('clean')">
-                    <i class="fa-solid fa-broom"></i>
-                    <h3>รักษาความสะอาด</h3>
-                    <p class="pillar-summary">โรงเรียนสะอาด ห้องน้ำไร้กลิ่น ธนาคารขยะแลกแต้ม</p>
+    <!-- Policy Cards Section -->
+    <section class="policies-section">
+        <div class="policies-grid">
+
+            <!-- Card 1 -->
+            <div class="policy-card" onclick="openModal(1)">
+                <div class="policy-card-image-wrapper">
+                    <img src="images/policies/1.png" alt="ดาว-เดือน" class="policy-card-image"
+                        onerror="this.src='https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600&h=400&fit=crop'">
+                    <div class="policy-card-number">1</div>
+                    <div class="policy-card-category">กิจกรรม</div>
                 </div>
-                <div class="pillar-card purple" onclick="scrollToPolicy('talent')">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i>
-                    <h3>การแสดงความสามารถ</h3>
-                    <p class="pillar-summary">เวทีประกวดดาวเดือนและดาวเทียม ปล่อยของเต็มที่</p>
+                <div class="policy-card-content">
+                    <h3 class="policy-card-title">ดาว-เดือน ดาวเทียม</h3>
+                    <p class="policy-card-summary">เวทีประกวดที่ต่อยอดสู่ To Be Idol เป็นหน้าตาให้โรงเรียน</p>
+                    <div class="policy-card-footer">
+                        <span class="policy-card-cta">ดูรายละเอียด <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
                 </div>
-                <div class="pillar-card dark-blue" onclick="scrollToPolicy('sports')">
-                    <i class="fa-solid fa-volleyball"></i>
-                    <h3>กีฬาและยาเสพติด</h3>
-                    <p class="pillar-summary">กิจกรรมต้านยาเสพติด กีฬาสานสัมพันธ์พี่น้อง</p>
-                </div>
-                <div class="pillar-card red" onclick="scrollToPolicy('fun')">
-                    <i class="fa-solid fa-face-laugh-beam"></i>
-                    <h3>ความสนุก & บริการ</h3>
-                    <p class="pillar-summary">เสียงตามสาย ส่งต่อความรัก เว็บแจ้งปัญหาโรงเรียน</p>
-                </div>
-                <div class="pillar-card orange" onclick="scrollToPolicy('skills')">
-                    <i class="fa-solid fa-rocket"></i>
-                    <h3>ส่งเสริมความสามารถ</h3>
-                    <p class="pillar-summary">แข่งวิชาการ ตลาดนัดนักเรียน สร้างรายได้ระหว่างเรียน</p>
-                </div>
-                <div class="pillar-card green" onclick="scrollToPolicy('others')">
-                    <i class="fa-solid fa-circle-nodes"></i>
-                    <h3>อื่นๆ</h3>
-                    <p class="pillar-summary">เครือข่ายเข้ามหาลัย แนะนำค่าย และกิจกรรมต่างๆ</p>
-                </div>
-                <!-- หมวดหมู่เสริมที่ 6 (ตามคำขอ) -->
-                <div class="policy-category" id="others_extra" style="display:none;"></div>
             </div>
+
+            <!-- Card 2 -->
+            <div class="policy-card" onclick="openModal(2)">
+                <div class="policy-card-image-wrapper">
+                    <img src="images/policies/2.png" alt="ตลาดนัด" class="policy-card-image"
+                        onerror="this.src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop'">
+                    <div class="policy-card-number">2</div>
+                    <div class="policy-card-category">เศรษฐกิจ</div>
+                </div>
+                <div class="policy-card-content">
+                    <h3 class="policy-card-title">ตลาดนัดนักเรียน</h3>
+                    <p class="policy-card-summary">สร้างรายได้และฝึกทักษะการทำงาน ทักษะชีวิต</p>
+                    <div class="policy-card-footer">
+                        <span class="policy-card-cta">ดูรายละเอียด <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="policy-card" onclick="openModal(3)">
+                <div class="policy-card-image-wrapper">
+                    <img src="images/policies/3.png" alt="ห้องน้ำไร้กลิ่น" class="policy-card-image"
+                        onerror="this.src='https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600&h=400&fit=crop'">
+                    <div class="policy-card-number">3</div>
+                    <div class="policy-card-category">สิ่งอำนวยความสะดวก</div>
+                </div>
+                <div class="policy-card-content">
+                    <h3 class="policy-card-title">ห้องน้ำไร้กลิ่น</h3>
+                    <p class="policy-card-summary">บริการน้ำยาลดกลิ่นไม่พึงประสงค์ในห้องน้ำ</p>
+                    <div class="policy-card-footer">
+                        <span class="policy-card-cta">ดูรายละเอียด <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="policy-card" onclick="openModal(4)">
+                <div class="policy-card-image-wrapper">
+                    <img src="images/policies/4.png" alt="กีฬาต้านยาเสพติด" class="policy-card-image"
+                        onerror="this.src='https://images.unsplash.com/photo-1461896836934-8c6f3f0e?w=600&h=400&fit=crop'">
+                    <div class="policy-card-number">4</div>
+                    <div class="policy-card-category">สุขภาพ</div>
+                </div>
+                <div class="policy-card-content">
+                    <h3 class="policy-card-title">กีฬาต้านยาเสพติด</h3>
+                    <p class="policy-card-summary">ให้นักเรียนมีสุขภาพที่แข็งแรง ห่างไกลยาเสพติด</p>
+                    <div class="policy-card-footer">
+                        <span class="policy-card-cta">ดูรายละเอียด <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="policy-card" onclick="openModal(5)">
+                <div class="policy-card-image-wrapper">
+                    <img src="images/policies/5.png" alt="แข่งขันวิชาการ" class="policy-card-image"
+                        onerror="this.src='https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=600&h=400&fit=crop'">
+                    <div class="policy-card-number">5</div>
+                    <div class="policy-card-category">การศึกษา</div>
+                </div>
+                <div class="policy-card-content">
+                    <h3 class="policy-card-title">แข่งขันวิชาการ</h3>
+                    <p class="policy-card-summary">เทอมละ 1 ครั้ง วิชาชีววิทยาและภาษาต่างประเทศ</p>
+                    <div class="policy-card-footer">
+                        <span class="policy-card-cta">ดูรายละเอียด <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 6 -->
+            <div class="policy-card" onclick="openModal(6)">
+                <div class="policy-card-image-wrapper">
+                    <img src="images/policies/6.png" alt="เครือข่ายเข้ามหาลัย" class="policy-card-image"
+                        onerror="this.src='https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&h=400&fit=crop'">
+                    <div class="policy-card-number">6</div>
+                    <div class="policy-card-category">การศึกษา</div>
+                </div>
+                <div class="policy-card-content">
+                    <h3 class="policy-card-title">เครือข่ายเข้ามหาวิทยาลัย</h3>
+                    <p class="policy-card-summary">พี่มอปลายแนะนำค่ายและกิจกรรมต่างๆ</p>
+                    <div class="policy-card-footer">
+                        <span class="policy-card-cta">ดูรายละเอียด <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 7 -->
+            <div class="policy-card" onclick="openModal(7)">
+                <div class="policy-card-image-wrapper">
+                    <img src="images/policies/7.png" alt="จิตอาสาแลกแต้ม" class="policy-card-image"
+                        onerror="this.src='https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=600&h=400&fit=crop'">
+                    <div class="policy-card-number">7</div>
+                    <div class="policy-card-category">สานต่อสภา 68</div>
+                </div>
+                <div class="policy-card-content">
+                    <h3 class="policy-card-title">จิตอาสาแลกแต้ม</h3>
+                    <p class="policy-card-summary">สานต่อสภาปี 68 + ฟอร์มแจ้งปัญหา + Random Dance</p>
+                    <div class="policy-card-footer">
+                        <span class="policy-card-cta">ดูรายละเอียด <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 8 -->
+            <div class="policy-card" onclick="openModal(8)">
+                <div class="policy-card-image-wrapper">
+                    <img src="images/policies/8.png" alt="ห้องน้ำ LGBT" class="policy-card-image"
+                        onerror="this.src='https://images.unsplash.com/photo-1573164713988-8665fc963095?w=600&h=400&fit=crop'">
+                    <div class="policy-card-number">8</div>
+                    <div class="policy-card-category">ความเท่าเทียม</div>
+                </div>
+                <div class="policy-card-content">
+                    <h3 class="policy-card-title">ห้องน้ำ LGBT</h3>
+                    <p class="policy-card-summary">ขับเคลื่อนความเท่าเทียมในโรงเรียน</p>
+                    <div class="policy-card-footer">
+                        <span class="policy-card-cta">ดูรายละเอียด <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 9 -->
+            <div class="policy-card" onclick="openModal(9)">
+                <div class="policy-card-image-wrapper">
+                    <img src="images/policies/9.png" alt="สิทธิทรงผม" class="policy-card-image"
+                        onerror="this.src='https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600&h=400&fit=crop'">
+                    <div class="policy-card-number">9</div>
+                    <div class="policy-card-category">สิทธินักเรียน</div>
+                </div>
+                <div class="policy-card-content">
+                    <h3 class="policy-card-title">สิทธิทรงผม 3.8+</h3>
+                    <p class="policy-card-summary">ผลักดันสิทธิทรงผมสำหรับเกรดเฉลี่ย 3.8 ขึ้นไป</p>
+                    <div class="policy-card-footer">
+                        <span class="policy-card-cta">ดูรายละเอียด <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
     </section>
 
-    <!-- Detailed Policies Grid (Anchors) -->
-    <div id="noResults" class="container text-center" style="display: none; padding: 40px;">
-        <i class="fa-solid fa-face-frown fa-3x" style="color: var(--color-text-muted); margin-bottom: 20px;"></i>
-        <p style="color: var(--color-text-muted); font-size: 1.2rem;">ไม่พบนโยบายที่เกี่ยวข้องกับคำค้นหาของคุณ</p>
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="policyModal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="modal-image-wrapper">
+                <img src="" alt="" class="modal-image" id="modalImage">
+                <div class="modal-gradient"></div>
+            </div>
+            <div class="modal-body">
+                <div class="modal-header">
+                    <div class="modal-number" id="modalNumber">1</div>
+                    <div class="modal-title-group">
+                        <span class="modal-category" id="modalCategory">หมวดหมู่</span>
+                        <h2 class="modal-title" id="modalTitle">ชื่อนโยบาย</h2>
+                    </div>
+                </div>
+                <p class="modal-description" id="modalDescription">
+                    รายละเอียดนโยบาย...
+                </p>
+                <div class="modal-features">
+                    <div class="modal-features-header">
+                        <i class="fa-solid fa-check"></i>
+                        <h4>สิ่งที่จะได้รับ</h4>
+                    </div>
+                    <ul id="modalFeatures">
+                        <li><i class="fa-solid fa-check-circle"></i> รายการ 1</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <section class="section">
-        <div class="container">
-
-            <!-- Category 1: Cleanliness -->
-            <div class="policy-category" id="clean">
-                <div class="category-header">
-                    <div class="cat-icon green"><i class="fa-solid fa-sparkles"></i></div>
-                    <h2>หมวดที่ 1 รักษาความสะอาด</h2>
-                </div>
-                <div class="policy-grid">
-                    <div class="policy-card">
-                        <div class="policy-number">01</div>
-                        <h3><i class="fa-solid fa-broom policy-icon"></i> Clean School Support</h3>
-                        <p class="policy-desc">สนับสนุนความสะอาดในโรงเรียน จัดหาอุปกรณ์และรณรงค์รักษาความสะอาดร่วมกัน
-                        </p>
-                    </div>
-                    <div class="policy-card">
-                        <div class="policy-number">02</div>
-                        <h3><i class="fa-solid fa-soap policy-icon"></i> Fresh Toilet</h3>
-                        <p class="policy-desc">บริการน้ำยาลดกลิ่นไม่พึงประสงค์ในห้องน้ำ เพื่อสุขอนามัยที่ดีของทุกคน</p>
-                    </div>
-                    <div class="policy-card">
-                        <div class="policy-number">03</div>
-                        <h3><i class="fa-solid fa-recycle policy-icon"></i> ธนาคารขยะ</h3>
-                        <p class="policy-desc">ขยะมีค่า! ใส่ เพื่อ แลก แต้มสะสมแลกรางวัลหรือสิทธิพิเศษต่างๆ</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Category 2: Talents -->
-            <div class="policy-category" id="talent">
-                <div class="category-header">
-                    <div class="cat-icon purple"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
-                    <h2>หมวดที่ 2 การแสดงความสามารถ</h2>
-                </div>
-                <div class="policy-grid">
-                    <div class="policy-card">
-                        <div class="policy-number">04</div>
-                        <h3><i class="fa-solid fa-star policy-icon"></i> Star Contest</h3>
-                        <p class="policy-desc">จัดกิจกรรมประกวดดาวเดือน และดาวเทียม
-                            เปิดเวทีให้ทุกคนได้แสดงความสามารถอย่างเต็มที่</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Category 3: Sports and Drugs -->
-            <div class="policy-category" id="sports">
-                <div class="category-header">
-                    <div class="cat-icon blue"><i class="fa-solid fa-trophy"></i></div>
-                    <h2>หมวดที่ 3 ด้านกีฬาและยาเสพติด</h2>
-                </div>
-                <div class="policy-grid">
-                    <div class="policy-card">
-                        <div class="policy-number">05</div>
-                        <h3><i class="fa-solid fa-shield-halved policy-icon"></i> Anti-Drug Active</h3>
-                        <p class="policy-desc">จัดตั้งกิจกรรมต้านยาเสพติดเชิงรุก ใช้กิจกรรมสร้างสรรค์ห่างไกลสิ่งมึนเมา
-                        </p>
-                    </div>
-                    <div class="policy-card">
-                        <div class="policy-number">06</div>
-                        <h3><i class="fa-solid fa-handshake-angle policy-icon"></i> Friendly Match</h3>
-                        <p class="policy-desc">กีฬากระชับมิตรสานสัมพันธ์พี่น้อง เชื่อมความสัมพันธ์ในโรงเรียนผ่านกีฬา</p>
-                    </div>
-                    <div class="policy-card">
-                        <div class="policy-number">07</div>
-                        <h3><i class="fa-solid fa-circle-info policy-icon"></i> Drug Awareness</h3>
-                        <p class="policy-desc">จัดอบรมเรื่องบุหรี่และสารเสพติดอื่นๆ ให้ความรู้ที่ถูกต้องเพื่อการป้องกัน
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Category 4: Fun and Services -->
-            <div class="policy-category" id="fun">
-                <div class="category-header">
-                    <div class="cat-icon red"><i class="fa-solid fa-face-smile-beam"></i></div>
-                    <h2>หมวดที่ 4 สร้างความสนุกและบริการ</h2>
-                </div>
-                <div class="policy-grid">
-                    <div class="policy-card">
-                        <div class="policy-number">08</div>
-                        <h3><i class="fa-solid fa-radio policy-icon"></i> School Radio</h3>
-                        <p class="policy-desc">บริการเสียงตามสาย อัปเดตข่าวสารและเพลงสนุกๆ ทุกพักเที่ยง</p>
-                    </div>
-                    <div class="policy-card">
-                        <div class="policy-number">09</div>
-                        <h3><i class="fa-solid fa-envelope-heart policy-icon"></i> ศว. ส่งต่อความรัก</h3>
-                        <p class="policy-desc">กิจกรรมส่งจดหมายหรือของที่ระลึกแทนความรู้สึกในโอกาสพิเศษ</p>
-                    </div>
-                    <div class="policy-card">
-                        <div class="policy-number">10</div>
-                        <h3><i class="fa-solid fa-bug-slash policy-icon"></i> Report Website</h3>
-                        <p class="policy-desc">สร้างเว็บไซต์แจ้งปัญหาต่างๆ ในโรงเรียน ติดตามผลได้รวดเร็ว</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Category 5: Skills Promotion -->
-            <div class="policy-category" id="skills">
-                <div class="category-header">
-                    <div class="cat-icon yellow"><i class="fa-solid fa-rocket"></i></div>
-                    <h2>หมวดที่ 5 ส่งเสริมความสามารถ</h2>
-                </div>
-                <div class="policy-grid">
-                    <div class="policy-card">
-                        <div class="policy-number">11</div>
-                        <h3><i class="fa-solid fa-medal policy-icon"></i> Academic Competition</h3>
-                        <p class="policy-desc">จัดตั้งการแข่งขันวิชาการ ฝึกทักษะและประลองความรู้ในด้านต่างๆ</p>
-                    </div>
-                    <div class="policy-card">
-                        <div class="policy-number">12</div>
-                        <h3><i class="fa-solid fa-store policy-icon"></i> Student Market</h3>
-                        <p class="policy-desc">จัดตั้งตลาดนัดนักเรียน
-                            เปิดพื้นที่สร้างรายได้และฝึกทักษะการเป็นผู้ประกอบการ</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Category 6: Others -->
-            <div class="policy-category" id="others">
-                <div class="category-header">
-                    <div class="cat-icon teal"><i class="fa-solid fa-circle-nodes"></i></div>
-                    <h2>หมวดที่ 6 อื่นๆ</h2>
-                </div>
-                <div class="policy-grid">
-                    <div class="policy-card">
-                        <div class="policy-number">13</div>
-                        <h3><i class="fa-solid fa-graduation-cap policy-icon"></i> University Network</h3>
-                        <p class="policy-desc">สร้างเครือข่ายสำหรับเข้ามหาลัย แนะนำกิจกรรม ค่าย และแนะแนวโดยรุ่นพี่</p>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </section>
 
     <!-- Footer -->
     <footer>
@@ -512,19 +868,14 @@
                     <h4>เมนูลัด</h4>
                     <ul>
                         <li><a href="about.html">รู้จักพรรค</a></li>
-                        <li><a href="#" class="badge-link" onclick="return false;">นโยบาย <span
-                                    class="badge-tooltip wait"><i class="fa-solid fa-hourglass-start"></i>
-                                    ยังไม่ถึงเวลา</span></a></li>
+                        <li><a href="policies.html">นโยบาย</a></li>
                         <li><a href="candidates.html">สมาชิก</a></li>
-                        <li><a href="#" class="badge-link" onclick="return false;">คุยกับ AI <span
-                                    class="badge-tooltip"><i class="fa-solid fa-wrench"></i> กำลังพัฒนา</span></a></li>
                     </ul>
                 </div>
                 <div class="footer-links">
                     <h4>ติดต่อเรา</h4>
                     <ul>
-                        <li><a
-                                href="https://www.instagram.com/want.to.try.number1?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="><i
+                        <li><a href="https://www.instagram.com/want.to.try.number1"><i
                                     class="fa-brands fa-instagram"></i> WANT TO TRY</a></li>
                     </ul>
                 </div>
@@ -536,7 +887,7 @@
         </div>
     </footer>
 
-    <!-- Floating Action Button -->
+    <!-- FAB -->
     <div class="fab-container" id="quickContactFab">
         <div class="fab-menu">
             <h4><i class="fa-solid fa-bolt"></i> ติดต่อด่วน</h4>
@@ -548,6 +899,9 @@
                 <a href="contact.html" class="btn btn-primary">
                     <i class="fa-solid fa-paper-plane"></i> ส่งข้อความถึงเรา
                 </a>
+                <a href="trash-report.html" class="btn btn-success">
+                    <i class="fa-solid fa-trash-can"></i> รายงานจุดขยะ
+                </a>
             </div>
         </div>
         <button class="fab-button">
@@ -555,7 +909,176 @@
         </button>
     </div>
 
+    <!-- Scripts -->
     <script src="script.js"></script>
+    <script>
+        // Policy Data
+        const policies = {
+            1: {
+                title: "ดาว-เดือน ดาวเทียม",
+                category: "กิจกรรม",
+                image: "images/policies/3_20260209_131231_0000.png",
+                fallback: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&h=500&fit=crop",
+                description: "เวทีประกวดดาว-เดือน ดาวเทียม เป็นกิจกรรมที่จะช่วยให้นักเรียนได้แสดงความสามารถและเป็นตัวแทนของโรงเรียน พร้อมต่อยอดสู่การประกวด To Be Idol ในระดับที่สูงขึ้น",
+                features: [
+                    "เวทีแสดงความสามารถสำหรับนักเรียนทุกคน",
+                    "คัดเลือกตัวแทนโรงเรียนอย่างโปร่งใส",
+                    "ต่อยอดสู่การประกวด To Be Idol",
+                    "สร้างชื่อเสียงให้กับโรงเรียน"
+                ]
+            },
+            2: {
+                title: "ตลาดนัดนักเรียน",
+                category: "เศรษฐกิจ",
+                image: "images/policies/4_20260209_131231_0001.png",
+                fallback: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=500&fit=crop",
+                description: "ตลาดนัดนักเรียนเป็นพื้นที่ให้นักเรียนได้ฝึกทักษะการขายของ การจัดการเงิน และสร้างรายได้ระหว่างเรียน เป็นการเตรียมความพร้อมสู่การเป็นผู้ประกอบการในอนาคต",
+                features: [
+                    "สร้างรายได้ระหว่างเรียน",
+                    "ฝึกทักษะการทำธุรกิจ",
+                    "เรียนรู้การจัดการเงิน",
+                    "พื้นที่แสดงผลงานและความคิดสร้างสรรค์"
+                ]
+            },
+            3: {
+                title: "ห้องน้ำไร้กลิ่น",
+                category: "สิ่งอำนวยความสะดวก",
+                image: "images/policies/5_20260209_131231_0002.png",
+                fallback: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&h=500&fit=crop",
+                description: "บริการน้ำยาลดกลิ่นไม่พึงประสงค์ในห้องน้ำ เพื่อให้ห้องน้ำโรงเรียนมีความสะอาด สดชื่น และน่าใช้งานมากขึ้น",
+                features: [
+                    "ติดตั้งระบบลดกลิ่นในห้องน้ำ",
+                    "ห้องน้ำสะอาดและสดชื่นตลอดวัน",
+                    "เพิ่มความสุขในการใช้งาน",
+                    "ดูแลสุขอนามัยของนักเรียน"
+                ]
+            },
+            4: {
+                title: "กีฬาต้านยาเสพติด",
+                category: "สุขภาพ",
+                image: "images/policies/6_20260209_131231_0003.png",
+                fallback: "https://images.unsplash.com/photo-1461896836934-8c6f3f0e?w=800&h=500&fit=crop",
+                description: "จัดกิจกรรมกีฬาเพื่อให้นักเรียนมีสุขภาพที่แข็งแรง และห่างไกลจากยาเสพติด ส่งเสริมการใช้เวลาว่างให้เป็นประโยชน์",
+                features: [
+                    "แข่งขันกีฬาระหว่างห้อง/ชั้นปี",
+                    "สร้างเสริมสุขภาพที่ดี",
+                    "สร้างความสามัคคีในโรงเรียน",
+                    "ห่างไกลยาเสพติด"
+                ]
+            },
+            5: {
+                title: "แข่งขันวิชาการ",
+                category: "การศึกษา",
+                image: "images/policies/7_20260209_131231_0004.png",
+                fallback: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&h=500&fit=crop",
+                description: "จัดการแข่งขันวิชาการเทอมละ 1 ครั้ง ในวิชาชีววิทยาและภาษาต่างประเทศ เพื่อส่งเสริมการเรียนรู้และพัฒนาศักยภาพของนักเรียน",
+                features: [
+                    "แข่งขันวิชาการเทอมละ 1 ครั้ง",
+                    "วิชาชีววิทยาและภาษาต่างประเทศ",
+                    "รางวัลสำหรับผู้ชนะ",
+                    "ส่งเสริมการเรียนรู้อย่างสร้างสรรค์"
+                ]
+            },
+            6: {
+                title: "เครือข่ายเข้ามหาวิทยาลัย",
+                category: "การศึกษา",
+                image: "images/policies/8_20260209_131232_0005.png",
+                fallback: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&h=500&fit=crop",
+                description: "สร้างเครือข่ายให้พี่มอปลายแนะนำค่ายและกิจกรรมต่างๆ ที่เกี่ยวข้องกับการเข้ามหาวิทยาลัย เพื่อช่วยเตรียมความพร้อมให้กับน้องๆ",
+                features: [
+                    "พี่ๆ ศิษย์เก่าแนะนำค่าย",
+                    "ข้อมูล TCAS และการสอบ",
+                    "กลุ่มไลน์แลกเปลี่ยนความรู้",
+                    "Workshop เตรียมตัวสอบ"
+                ]
+            },
+            7: {
+                title: "จิตอาสาแลกแต้ม",
+                category: "สานต่อสภา 68",
+                image: "images/policies/9_20260209_131232_0006.png",
+                fallback: "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=800&h=500&fit=crop",
+                description: "สานต่อโครงการจิตอาสาแลกแต้มจากสภานักเรียนปี 68 รวมถึงฟอร์มแจ้งปัญหาต่างๆ และกิจกรรม Random Dance เพื่อส่งเสริมการมีส่วนร่วมและความกล้าแสดงออกของนักเรียน",
+                features: [
+                    "สะสมแต้มจากการทำจิตอาสา",
+                    "ฟอร์มแจ้งปัญหาต่างๆ ในโรงเรียน",
+                    "Random Dance ศุกร์เว้นศุกร์",
+                    "ส่งเสริมการมีส่วนร่วมและกล้าแสดงออก"
+                ]
+            },
+            8: {
+                title: "ห้องน้ำ LGBT",
+                category: "ความเท่าเทียม",
+                image: "images/policies/10_20260209_131232_0007.png",
+                fallback: "https://images.unsplash.com/photo-1573164713988-8665fc963095?w=800&h=500&fit=crop",
+                description: "ผลักดันให้มีห้องน้ำสำหรับนักเรียน LGBT เพื่อความเท่าเทียมและความสะดวกสบายในการใช้งาน สร้างบรรยากาศที่เป็นมิตรสำหรับทุกคน",
+                features: [
+                    "ห้องน้ำสำหรับทุกเพศ",
+                    "ความเป็นส่วนตัวและปลอดภัย",
+                    "ส่งเสริมความเท่าเทียม",
+                    "สร้างบรรยากาศที่เป็นมิตร"
+                ]
+            },
+            9: {
+                title: "สิทธิทรงผม 3.8+",
+                category: "สิทธินักเรียน",
+                image: "images/policies/11_20260209_131232_0008.png",
+                fallback: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&h=500&fit=crop",
+                description: "ผลักดันสิทธิในการทำทรงผมตามต้องการสำหรับนักเรียนที่มีเกรดเฉลี่ย 3.8 ขึ้นไป เป็นการให้รางวัลสำหรับนักเรียนที่ตั้งใจเรียน",
+                features: [
+                    "สิทธิพิเศษสำหรับ GPA 3.8+",
+                    "ทำทรงผมได้ตามต้องการ",
+                    "กระตุ้นให้นักเรียนตั้งใจเรียน",
+                    "รางวัลสำหรับความพยายาม"
+                ]
+            },
+        };
+
+        // Open Modal
+        function openModal(policyId) {
+            const policy = policies[policyId];
+            if (!policy) return;
+
+            const modal = document.getElementById('policyModal');
+            const modalImage = document.getElementById('modalImage');
+            const modalNumber = document.getElementById('modalNumber');
+            const modalCategory = document.getElementById('modalCategory');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalDescription = document.getElementById('modalDescription');
+            const modalFeatures = document.getElementById('modalFeatures');
+
+            modalImage.src = policy.image;
+            modalImage.onerror = function () {
+                this.src = policy.fallback;
+            };
+
+            modalNumber.textContent = policyId;
+            modalCategory.textContent = policy.category;
+            modalTitle.textContent = policy.title;
+            modalDescription.textContent = policy.description;
+
+            modalFeatures.innerHTML = policy.features.map(feature =>
+                `<li><i class="fa-solid fa-check-circle"></i> ${feature}</li>`
+            ).join('');
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close Modal
+        function closeModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+
+            const modal = document.getElementById('policyModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Close on Escape
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closeModal();
+        });
+    </script>
+
 </body>
 
 </html>

@@ -124,6 +124,17 @@ img {
     background: rgba(69, 123, 157, 0.2);
 }
 
+.btn-success {
+    background: linear-gradient(135deg, var(--color-school-green), #1D7A6E);
+    color: white;
+    box-shadow: 0 4px 12px rgba(42, 157, 143, 0.3);
+}
+
+.btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(42, 157, 143, 0.4);
+}
+
 /* Countdown Banner (Modern Floating Pill) */
 .countdown-banner {
     background: rgba(255, 255, 255, 0.7);
@@ -344,6 +355,215 @@ img {
     color: #2A9D8F;
     border: 1px solid rgba(42, 157, 143, 0.2);
 }
+
+/* New Colors for Additional Policies */
+.pillar-card.yellow {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.15), rgba(255, 160, 0, 0.05));
+    color: #f59e0b;
+    border: 1px solid rgba(255, 193, 7, 0.2);
+}
+
+.pillar-card.rainbow {
+    background: linear-gradient(135deg,
+            rgba(255, 0, 0, 0.1),
+            rgba(255, 127, 0, 0.1),
+            rgba(255, 255, 0, 0.1),
+            rgba(0, 255, 0, 0.1),
+            rgba(0, 0, 255, 0.1),
+            rgba(139, 0, 255, 0.1));
+    color: #e91e63;
+    border: 2px solid transparent;
+    border-image: linear-gradient(135deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #8b00ff) 1;
+    border-image-slice: 1;
+}
+
+.pillar-card.gold {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(218, 165, 32, 0.1));
+    color: #d4a00a;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.pillar-card.pink {
+    background: linear-gradient(135deg, rgba(255, 105, 180, 0.15), rgba(219, 112, 147, 0.1));
+    color: #ec4899;
+    border: 1px solid rgba(255, 105, 180, 0.2);
+}
+
+/* Category Icon Colors */
+.cat-icon.rainbow {
+    background: linear-gradient(135deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #8b00ff);
+}
+
+.cat-icon.gold {
+    background: linear-gradient(135deg, #ffd700, #daa520);
+}
+
+.cat-icon.pink {
+    background: linear-gradient(135deg, #ff69b4, #ec4899);
+}
+
+.cat-icon.dark-blue {
+    background: linear-gradient(135deg, #0d6efd, #084298);
+}
+
+/* Policy Card Featured Style */
+.policy-card.featured {
+    border: 2px solid transparent;
+    background: linear-gradient(#fff, #fff) padding-box,
+        linear-gradient(135deg, var(--color-primary-red), var(--color-primary-blue)) border-box;
+}
+
+.policy-card.rainbow-border {
+    border: 2px solid transparent;
+    background: linear-gradient(#fff, #fff) padding-box,
+        linear-gradient(135deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #8b00ff) border-box;
+}
+
+.policy-card.gold-border {
+    border: 2px solid transparent;
+    background: linear-gradient(#fff, #fff) padding-box,
+        linear-gradient(135deg, #ffd700, #daa520) border-box;
+}
+
+.policy-card.pink-border {
+    border: 2px solid transparent;
+    background: linear-gradient(#fff, #fff) padding-box,
+        linear-gradient(135deg, #ff69b4, #ec4899) border-box;
+}
+
+/* Policy Image Placeholder */
+.policy-image-placeholder {
+    margin-top: 20px;
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    background: var(--color-bg-light);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-muted);
+    border: 2px dashed var(--color-border);
+}
+
+.policy-image-placeholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.policy-image-placeholder i {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    opacity: 0.5;
+}
+
+.policy-image-placeholder span {
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
+/* Policy Gallery Section */
+.policy-gallery-section {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 60px 0;
+}
+
+.policy-gallery-section .section-header {
+    margin-bottom: 40px;
+}
+
+.policy-gallery-section .section-header h2 {
+    font-size: 2rem;
+    color: var(--color-text-main);
+}
+
+.policy-gallery-section .section-header h2 i {
+    color: var(--color-primary-red);
+    margin-right: 10px;
+}
+
+.policy-gallery-section .section-header p {
+    color: var(--color-text-muted);
+    margin-top: 10px;
+}
+
+.policy-gallery {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+}
+
+.gallery-item {
+    position: relative;
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-normal);
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.gallery-item:hover img {
+    transform: scale(1.1);
+}
+
+.gallery-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px 15px 15px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    color: white;
+    transform: translateY(100%);
+    transition: var(--transition-normal);
+}
+
+.gallery-item:hover .gallery-overlay {
+    transform: translateY(0);
+}
+
+.gallery-overlay span {
+    font-size: 1.5rem;
+    font-weight: 800;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.gallery-overlay p {
+    font-size: 0.85rem;
+    opacity: 0.9;
+}
+
+.gallery-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+@media (max-width: 900px) {
+    .policy-gallery {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .policy-gallery {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .pillars-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 
 .pillar-card:hover {
     transform: translateY(-10px);

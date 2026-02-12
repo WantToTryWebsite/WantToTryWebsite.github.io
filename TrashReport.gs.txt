@@ -1,0 +1,172 @@
+/**
+ * Google Apps Script Backend for Trash Report System
+ * 
+ * Setup Instructions:
+ * 1. Create a new Google Sheet with columns:
+ *    A: Timestamp | B: Location | C: LocationDetail | D: CoordX | E: CoordY 
+ *    F: Severity | G: Description | H: ImageURL | I: Status
+ * 2. Get the Sheet ID from the URL
+ * 3. Open Extensions > Apps Script
+ * 4. Paste this code
+ * 5. Update SHEET_ID and TARGET_EMAIL below
+ * 6. Deploy as Web App:
+ *    - Execute as: Me
+ *    - Who has access: Anyone
+ */
+
+const SHEET_ID = 'YOUR_SHEET_ID_HERE';
+const TARGET_EMAIL = 'student-council@school.ac.th';
+const SHEET_NAME = 'TrashReports'; // Name of the sheet tab
+
+// ===== POST: Receive new report =====
+function doPost(e) {
+  try {
+    const data = JSON.parse(e.postData.contents);
+    const ss = SpreadsheetApp.openById(SHEET_ID);
+    let sheet = ss.getSheetByName(SHEET_NAME);
+    
+    // Create sheet if it doesn't exist
+    if (!sheet) {
+      sheet = ss.insertSheet(SHEET_NAME);
+      sheet.appendRow([
+        'Timestamp', 'Location', 'LocationDetail', 'CoordX', 'CoordY',
+        'Severity', 'Description', 'ImageURL', 'Status'
+      ]);
+    }
+    
+    // Append new report
+    sheet.appendRow([
+      data.timestamp || new Date().toISOString(),
+      data.location || '',
+      data.locationDetail || '',
+      data.coordX || '',
+      data.coordY || '',
+      data.severity || 'medium',
+      data.description || '',
+      data.imageURL || '',
+      'pending' // Default status
+    ]);
+    
+    // Send notification email
+    sendNotificationEmail(data);
+    
+    return ContentService.createTextOutput(JSON.stringify({ 
+      status: 'success',
+      message: 'Report submitted successfully'
+    })).setMimeType(ContentService.MimeType.JSON);
+    
+  } catch (error) {
+    return ContentService.createTextOutput(JSON.stringify({ 
+      status: 'error', 
+      message: error.toString() 
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+// ===== GET: Fetch all reports =====
+function doGet(e) {
+  try {
+    const ss = SpreadsheetApp.openById(SHEET_ID);
+    const sheet = ss.getSheetByName(SHEET_NAME);
+    
+    if (!sheet) {
+      return ContentService.createTextOutput(JSON.stringify([]))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+    
+    const data = sheet.getDataRange().getValues();
+    
+    // Skip header row
+    const reports = data.slice(1).map((row, index) => ({
+      id: index + 1,
+      timestamp: row[0],
+      location: row[1],
+      locationDetail: row[2],
+      coordX: parseFloat(row[3]) || 0,
+      coordY: parseFloat(row[4]) || 0,
+      severity: row[5],
+      description: row[6],
+      imageURL: row[7],
+      status: row[8] || 'pending'
+    }));
+    
+    return ContentService.createTextOutput(JSON.stringify(reports))
+      .setMimeType(ContentService.MimeType.JSON);
+      
+  } catch (error) {
+    return ContentService.createTextOutput(JSON.stringify({ 
+      status: 'error', 
+      message: error.toString() 
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+// ===== Send notification email =====
+function sendNotificationEmail(data) {
+  const severityText = {
+    'low': '🟢 น้อย',
+    'medium': '🟡 ปานกลาง',
+    'high': '🔴 มาก'
+  };
+  
+  const subject = `[รายงานจุดขยะ] ${data.location} - ${severityText[data.severity] || 'ไม่ระบุ'}`;
+  
+  const body = `
+มีรายงานจุดขยะใหม่!
+
+📍 สถานที่: ${data.location}
+📋 รายละเอียด: ${data.locationDetail || 'ไม่ระบุ'}
+⚠️ ระดับความรุนแรง: ${severityText[data.severity] || 'ไม่ระบุ'}
+💬 คำอธิบาย: ${data.description || 'ไม่มี'}
+🕐 เวลา: ${new Date(data.timestamp).toLocaleString('th-TH')}
+
+---
+ระบบรายงานจุดขยะ - สภานักเรียน
+  `;
+  
+  try {
+    MailApp.sendEmail({
+      to: TARGET_EMAIL,
+      subject: subject,
+      body: body
+    });
+  } catch (e) {
+    console.error('Failed to send email:', e);
+  }
+}
+
+// ===== Update report status (for admin use) =====
+function updateReportStatus(reportId, newStatus) {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const sheet = ss.getSheetByName(SHEET_NAME);
+  
+  if (!sheet) return { status: 'error', message: 'Sheet not found' };
+  
+  // reportId is 1-based, row 1 is header, so actual row = reportId + 1
+  const row = reportId + 1;
+  const statusColumn = 9; // Column I
+  
+  sheet.getRange(row, statusColumn).setValue(newStatus);
+  
+  return { status: 'success', message: 'Status updated' };
+}
+
+// ===== Get statistics =====
+function getStats() {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const sheet = ss.getSheetByName(SHEET_NAME);
+  
+  if (!sheet) {
+    return { total: 0, pending: 0, inprogress: 0, completed: 0 };
+  }
+  
+  const data = sheet.getDataRange().getValues();
+  const reports = data.slice(1); // Skip header
+  
+  return {
+    total: reports.length,
+    pending: reports.filter(r => r[8] === 'pending').length,
+    inprogress: reports.filter(r => r[8] === 'inprogress').length,
+    completed: reports.filter(r => r[8] === 'completed').length
+  };
+}

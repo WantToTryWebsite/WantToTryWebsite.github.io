@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สถิติรายงานจุดขยะ | Want To Try</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Dashboard Styles */
+        .dashboard-container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-icon.total {
+            background: linear-gradient(135deg, rgba(69, 123, 157, 0.2), rgba(69, 123, 157, 0.1));
+            color: var(--color-primary-blue);
+        }
+
+        .stat-icon.pending {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.1));
+            color: #f59e0b;
+        }
+
+        .stat-icon.inprogress {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1));
+            color: #3b82f6;
+        }
+
+        .stat-icon.completed {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
+            color: #22c55e;
+        }
+
+        .stat-info h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-text-main);
+            margin-bottom: 4px;
+        }
+
+        .stat-info p {
+            color: var(--color-text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Map with Markers */
+        .dashboard-map-section {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 32px;
+        }
+
+        .dashboard-map-section h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            color: var(--color-text-main);
+        }
+
+        .dashboard-map-section h3 i {
+            color: var(--color-primary-red);
+        }
+
+        .dashboard-map-container {
+            position: relative;
+            width: 100%;
+            border-radius: var(--border-radius-md);
+            overflow: hidden;
+            border: 2px solid var(--color-border);
+        }
+
+        .dashboard-map-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .report-marker {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.7rem;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .report-marker:hover {
+            transform: translate(-50%, -50%) scale(1.2);
+            z-index: 100;
+        }
+
+        .report-marker.pending {
+            background: #f59e0b;
+        }
+
+        .report-marker.inprogress {
+            background: #3b82f6;
+        }
+
+        .report-marker.completed {
+            background: #22c55e;
+        }
+
+        .map-legend {
+            display: flex;
+            gap: 24px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+        }
+
+        .legend-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+        }
+
+        .legend-dot.pending {
+            background: #f59e0b;
+        }
+
+        .legend-dot.inprogress {
+            background: #3b82f6;
+        }
+
+        .legend-dot.completed {
+            background: #22c55e;
+        }
+
+        /* Reports List */
+        .reports-section {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .reports-section h3 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            color: var(--color-text-main);
+        }
+
+        .reports-section h3>span {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .reports-section h3 i {
+            color: var(--color-primary-red);
+        }
+
+        .report-card {
+            background: var(--color-bg-light);
+            border-radius: var(--border-radius-md);
+            padding: 20px;
+            margin-bottom: 16px;
+            border-left: 4px solid var(--color-primary-red);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .report-card:hover {
+            transform: translateX(4px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .report-card.status-pending {
+            border-left-color: #f59e0b;
+        }
+
+        .report-card.status-inprogress {
+            border-left-color: #3b82f6;
+        }
+
+        .report-card.status-completed {
+            border-left-color: #22c55e;
+        }
+
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .report-location {
+            font-weight: 600;
+            color: var(--color-text-main);
+            font-size: 1.1rem;
+        }
+
+        .report-location i {
+            color: var(--color-primary-red);
+            margin-right: 8px;
+        }
+
+        .report-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .report-status.pending {
+            background: rgba(245, 158, 11, 0.15);
+            color: #b45309;
+        }
+
+        .report-status.inprogress {
+            background: rgba(59, 130, 246, 0.15);
+            color: #1d4ed8;
+        }
+
+        .report-status.completed {
+            background: rgba(34, 197, 94, 0.15);
+            color: #15803d;
+        }
+
+        .report-meta {
+            display: flex;
+            gap: 20px;
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+            flex-wrap: wrap;
+        }
+
+        .report-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .severity-badge {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .severity-badge.low {
+            background: rgba(34, 197, 94, 0.15);
+            color: #15803d;
+        }
+
+        .severity-badge.medium {
+            background: rgba(245, 158, 11, 0.15);
+            color: #b45309;
+        }
+
+        .severity-badge.high {
+            background: rgba(239, 68, 68, 0.15);
+            color: #b91c1c;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--color-text-muted);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .empty-state h4 {
+            margin-bottom: 10px;
+            color: var(--color-text-main);
+        }
+
+        /* CTA */
+        .cta-banner {
+            background: linear-gradient(135deg, var(--color-primary-red), var(--color-primary-blue));
+            border-radius: var(--border-radius-lg);
+            padding: 32px;
+            text-align: center;
+            color: white;
+            margin-top: 32px;
+        }
+
+        .cta-banner h3 {
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+        }
+
+        .cta-banner p {
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .cta-banner .btn {
+            background: white;
+            color: var(--color-primary-red);
+        }
+
+        .cta-banner .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .report-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="images/Logo.png" alt="logo" width="40" height="40">
+                <div class="logo-text">
+                    <div class="logo-row">Want To Try<span class="sep">|</span> <span class="black">เด็กอยากลอง</span>
+                        <div class="party-number">
+                            <div class="p-num">1</div>
+                            <div class="p-mark"><i class="fa-solid fa-xmark"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Hamburger Menu Button -->
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <div class="nav-links">
+                <div class="mobile-menu-header">
+                    <div class="mobile-menu-logo">
+                        <img src="images/Logo.png" alt="logo">
+                        Want To Try
+                    </div>
+                    <div class="mobile-menu-close" onclick="toggleMenu()">
+                        <i class="fa-solid fa-xmark"></i>
+                    </div>
+                </div>
+
+                <a href="index.html" class="nav-link">
+                    <i class="fa-solid fa-house"></i>
+                    <div class="nav-text"><span>หน้าแรก</span></div>
+                </a>
+                <a href="about.html" class="nav-link">
+                    <i class="fa-solid fa-users"></i>
+                    <div class="nav-text"><span>รู้จักพรรค</span></div>
+                </a>
+                <a href="candidates.html" class="nav-link">
+                    <i class="fa-solid fa-user-tie"></i>
+                    <div class="nav-text"><span>สมาชิก</span></div>
+                </a>
+                <a href="policies.html" class="nav-link">
+                    <i class="fa-solid fa-book-open"></i>
+                    <div class="nav-text"><span>นโยบายพรรค</span></div>
+                </a>
+                <div class="nav-btn-wrapper">
+                    <a href="trash-report.html" class="nav-link">
+                        <i class="fa-solid fa-trash-can"></i>
+                        <div class="nav-text"><span>รายงานจุดขยะ</span></div>
+                    </a>
+                    <div class="dev-badge-small">
+                        <i class="fa-solid fa-wrench"></i> กำลังพัฒนา
+                    </div>
+                </div>
+                <div class="nav-btn-wrapper">
+                    <a href="ai-chat.html" class="btn btn-techno nav-link">
+                        <i class="fa-solid fa-robot"></i>
+                        <div class="nav-text"><span>คุยกับ AI</span></div>
+                    </a>
+                    <div class="dev-badge-small">
+                        <i class="fa-solid fa-wrench"></i> กำลังพัฒนา
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <h1 class="page-title"><i class="fa-solid fa-chart-pie"></i> สถิติรายงานจุดขยะ</h1>
+            <p class="page-subtitle">ติดตามสถานะการดำเนินการจัดการจุดขยะที่มีการรายงานเข้ามา</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <section class="section bg-light">
+        <div class="container dashboard-container">
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon total">
+                        <i class="fa-solid fa-clipboard-list"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="statTotal">0</h3>
+                        <p>รายงานทั้งหมด</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon pending">
+                        <i class="fa-solid fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="statPending">0</h3>
+                        <p>รอดำเนินการ</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon inprogress">
+                        <i class="fa-solid fa-spinner"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="statInProgress">0</h3>
+                        <p>กำลังดำเนินการ</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon completed">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="statCompleted">0</h3>
+                        <p>เสร็จสิ้น</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Map with Markers -->
+            <div class="dashboard-map-section">
+                <h3><i class="fa-solid fa-map-location-dot"></i> แผนที่แสดงจุดรายงาน</h3>
+                <div class="dashboard-map-container" id="dashboardMap">
+                    <img src="images/school-map.png" alt="แผนผังโรงเรียน">
+                    <!-- Markers will be added dynamically -->
+                </div>
+                <div class="map-legend">
+                    <div class="legend-item">
+                        <div class="legend-dot pending"></div>
+                        <span>รอดำเนินการ</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot inprogress"></div>
+                        <span>กำลังดำเนินการ</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot completed"></div>
+                        <span>เสร็จสิ้น</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports List -->
+            <div class="reports-section">
+                <h3>
+                    <span><i class="fa-solid fa-list"></i> รายการรายงานล่าสุด</span>
+                    <a href="trash-report.html" class="btn btn-primary" style="padding: 10px 20px; font-size: 0.9rem;">
+                        <i class="fa-solid fa-plus"></i> รายงานใหม่
+                    </a>
+                </h3>
+
+                <div id="reportsList">
+                    <!-- Reports will be loaded here -->
+                </div>
+            </div>
+
+            <!-- CTA Banner -->
+            <div class="cta-banner">
+                <h3><i class="fa-solid fa-hand-holding-heart"></i> ช่วยกันรักษาความสะอาด</h3>
+                <p>เห็นจุดที่มีขยะสะสม? รายงานได้เลย! สภานักเรียนพร้อมดำเนินการ</p>
+                <a href="trash-report.html" class="btn">
+                    <i class="fa-solid fa-paper-plane"></i> รายงานตอนนี้
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>Want To Try</h3>
+                    <p>กล้านำ ทำจริง <br>
+                        แล้วพวกเราจะมาช่วยกันพัฒนาโรงเรียนของพวกเราให้น่าอยู่มากยิ่งขึ้นไปพร้อมกันครับ💚💛🖤</p>
+                </div>
+                <div class="footer-links">
+                    <h4>เมนูลัด</h4>
+                    <ul>
+                        <li><a href="about.html">รู้จักพรรค</a></li>
+                        <li><a href="policies.html">นโยบาย</a></li>
+                        <li><a href="candidates.html">สมาชิก</a></li>
+                        <li><a href="trash-report.html">รายงานจุดขยะ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>ติดต่อเรา</h4>
+                    <ul>
+                        <li><a
+                                href="https://www.instagram.com/want.to.try.number1?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="><i
+                                    class="fa-brands fa-instagram"></i> WANT TO TRY</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>สื่อหาเสียงอิเล็กทรอนิกส์นี้ผลิตโดยพรรคเด็กอยากลอง</p>
+                <p>&copy; 2026 Want To Try Party. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Mock Data for demonstration
+        const mockReports = [
+            {
+                id: 1,
+                location: 'อาคาร 5',
+                locationDetail: 'ชั้น 2 หน้าห้อง ม.6/1',
+                coordX: 45,
+                coordY: 56,
+                severity: 'medium',
+                description: 'ขยะถุงพลาสติกและกระดาษสะสม',
+                status: 'pending',
+                timestamp: '2026-02-06T10:30:00'
+            },
+            {
+                id: 2,
+                location: 'โรงอาหาร',
+                locationDetail: 'บริเวณโต๊ะริมขวา',
+                coordX: 10,
+                coordY: 81,
+                severity: 'high',
+                description: 'ขยะเศษอาหารล้นถัง',
+                status: 'inprogress',
+                timestamp: '2026-02-06T09:15:00'
+            },
+            {
+                id: 3,
+                location: 'สนามตะกร้อ',
+                locationDetail: 'มุมสนามด้านซ้าย',
+                coordX: 25,
+                coordY: 30,
+                severity: 'low',
+                description: 'ขวดน้ำพลาสติกไม่กี่ขวด',
+                status: 'completed',
+                timestamp: '2026-02-05T14:20:00'
+            },
+            {
+                id: 4,
+                location: 'อาคาร 1',
+                locationDetail: 'ชั้น 3 ใกล้บันได',
+                coordX: 28,
+                coordY: 66,
+                severity: 'medium',
+                description: 'ถุงขนมและกระดาษ',
+                status: 'pending',
+                timestamp: '2026-02-06T11:00:00'
+            }
+        ];
+
+        // Update Stats
+        function updateStats() {
+            const total = mockReports.length;
+            const pending = mockReports.filter(r => r.status === 'pending').length;
+            const inprogress = mockReports.filter(r => r.status === 'inprogress').length;
+            const completed = mockReports.filter(r => r.status === 'completed').length;
+
+            animateNumber('statTotal', total);
+            animateNumber('statPending', pending);
+            animateNumber('statInProgress', inprogress);
+            animateNumber('statCompleted', completed);
+        }
+
+        function animateNumber(elementId, target) {
+            const el = document.getElementById(elementId);
+            let current = 0;
+            const increment = target / 20;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    el.textContent = target;
+                    clearInterval(timer);
+                } else {
+                    el.textContent = Math.floor(current);
+                }
+            }, 50);
+        }
+
+        // Render Map Markers
+        function renderMapMarkers() {
+            const mapContainer = document.getElementById('dashboardMap');
+
+            mockReports.forEach(report => {
+                const marker = document.createElement('div');
+                marker.className = `report-marker ${report.status}`;
+                marker.style.left = `${report.coordX}%`;
+                marker.style.top = `${report.coordY}%`;
+                marker.textContent = report.id;
+                marker.title = `${report.location} - ${report.locationDetail}`;
+                mapContainer.appendChild(marker);
+            });
+        }
+
+        // Render Reports List
+        function renderReportsList() {
+            const listContainer = document.getElementById('reportsList');
+
+            if (mockReports.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-inbox"></i>
+                        <h4>ยังไม่มีรายงาน</h4>
+                        <p>เมื่อมีการรายงานจุดขยะ รายการจะแสดงที่นี่</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Sort by timestamp (newest first)
+            const sorted = [...mockReports].sort((a, b) =>
+                new Date(b.timestamp) - new Date(a.timestamp)
+            );
+
+            listContainer.innerHTML = sorted.map(report => {
+                const date = new Date(report.timestamp).toLocaleString('th-TH', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                const statusText = {
+                    pending: 'รอดำเนินการ',
+                    inprogress: 'กำลังดำเนินการ',
+                    completed: 'เสร็จสิ้น'
+                };
+
+                const severityText = {
+                    low: 'น้อย',
+                    medium: 'ปานกลาง',
+                    high: 'มาก'
+                };
+
+                return `
+                    <div class="report-card status-${report.status}">
+                        <div class="report-header">
+                            <div class="report-location">
+                                <i class="fa-solid fa-location-dot"></i>
+                                ${report.location} - ${report.locationDetail}
+                            </div>
+                            <span class="report-status ${report.status}">${statusText[report.status]}</span>
+                        </div>
+                        <div class="report-meta">
+                            <span><i class="fa-solid fa-calendar"></i> ${date}</span>
+                            <span>
+                                <i class="fa-solid fa-gauge"></i> 
+                                <span class="severity-badge ${report.severity}">${severityText[report.severity]}</span>
+                            </span>
+                            ${report.description ? `<span><i class="fa-solid fa-comment"></i> ${report.description}</span>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updateStats();
+            renderMapMarkers();
+            renderReportsList();
+        });
+    </script>
+</body>
+
+</html>
